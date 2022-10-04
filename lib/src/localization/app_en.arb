@@ -1,0 +1,45 @@
+{
+  "appTitle": "flt_vndb",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "searchResults": "Search Results",
+  "@searchResults": {
+    "description": "The title of the search results page"
+  },
+  "emptyDetailsPage": "Select a VN to view details",
+  "@emptyDetailsPage": {
+    "description": "The text to display when the details page is empty"
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "The title of the settings page"
+  },
+  "localizedTitle": "Localized Title",
+  "@localizedTitle": {},
+  "localizedTitleDescription": "Use localized version of title wherever possible",
+  "@localizedTitleDescription": {},
+  "basicInfo": "Basic Info",
+  "popularity": "Popularity",
+  "rating": "Rating",
+  "titles": "Titles",
+  "aliases": "Aliases",
+  "theme": "Theme",
+  "systemTheme": "System",
+  "lightTheme": "Light",
+  "darkTheme": "Dark",
+  "otherLanguages": "Other Languages",
+  "unofficial": "unofficial",
+  "patch": "patch",
+  "releaseDate": "Release Date",
+  "spoilerLevel": "Spoiler Level",
+  "spoilerLevelNone": "None",
+  "spoilerLevelMinor": "Minor",
+  "spoilerLevelMajor": "Major",
+  "length": "Length",
+  "lengthVeryShort": "Very short",
+  "lengthShort": "Short",
+  "lengthMedium": "Medium",
+  "lengthLong": "Long",
+  "lengthVeryLong": "Very long"
+}
