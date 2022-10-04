@@ -41,5 +41,12 @@
   "lengthShort": "Short",
   "lengthMedium": "Medium",
   "lengthLong": "Long",
-  "lengthVeryLong": "Very long"
+  "lengthVeryLong": "Very long",
+  "language": "Language",
+  "systemLanguage": "System Language",
+  "apiAddress": "API Address",
+  "apiAddressDescription": "Change API settings here if you are using a custom server.",
+  "host": "Host",
+  "port": "Port",
+  "useTls": "Use TLS"
 }

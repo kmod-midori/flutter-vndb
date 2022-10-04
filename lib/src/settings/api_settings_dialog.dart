@@ -2,6 +2,7 @@ import 'package:flt_vndb/src/settings/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ApiSettingsDialog extends HookWidget {
   final ApiConfig initialValue;
@@ -13,14 +14,16 @@ class ApiSettingsDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     final formKey = useMemoized(() => GlobalKey<FormState>(), const []);
 
     String? savedAddress;
 
     final addressField = TextFormField(
       initialValue: initialValue.address,
-      decoration: const InputDecoration(
-        hintText: 'Address',
+      decoration: InputDecoration(
+        hintText: l10n.apiAddress,
       ),
       validator: (String? value) {
         if (value == null || value.isEmpty) {
@@ -37,8 +40,8 @@ class ApiSettingsDialog extends HookWidget {
 
     final portField = TextFormField(
       initialValue: initialValue.port.toString(),
-      decoration: const InputDecoration(
-        hintText: 'Port',
+      decoration: InputDecoration(
+        hintText: l10n.port,
       ),
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
@@ -81,14 +84,14 @@ class ApiSettingsDialog extends HookWidget {
             onChanged: (value) {
               useTls.value = value ?? false;
             },
-            title: Text('Use TLS'),
+            title: Text(l10n.useTls),
           ),
         ],
       ),
     );
 
     return AlertDialog(
-      title: Text('API Settings'),
+      title: Text(l10n.apiAddress),
       content: SizedBox(
         width: 300,
         height: 300,

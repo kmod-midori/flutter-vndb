@@ -24,6 +24,9 @@ class SettingsController with ChangeNotifier {
   late ApiConfig _apiConfig;
   ApiConfig get apiConfig => _apiConfig;
 
+  late Locale? _locale;
+  Locale? get locale => _locale;
+
   static SettingsController of(BuildContext context) {
     return Provider.of<SettingsController>(context);
   }
@@ -33,6 +36,7 @@ class SettingsController with ChangeNotifier {
     _themeMode = await _settingsService.themeMode();
     _localizedTitle = await _settingsService.localizedTitle();
     _apiConfig = await _settingsService.apiConfig();
+    _locale = await _settingsService.locale();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -63,5 +67,14 @@ class SettingsController with ChangeNotifier {
     vndbApi.configure(newApiConfig);
     notifyListeners();
     await _settingsService.updateApiConfig(newApiConfig);
+  }
+
+  Future<void> updateLocale(Locale? newLocale) async {
+    if (newLocale == _locale) {
+      return;
+    }
+    _locale = newLocale;
+    notifyListeners();
+    await _settingsService.updateLocale(newLocale);
   }
 }

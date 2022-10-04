@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+import 'package:flt_vndb/src/data/locales.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,6 +39,32 @@ class SettingsService {
     await prefs.setString('apiAddress', config.address);
     await prefs.setInt('apiPort', config.port);
     await prefs.setBool('apiUseTls', config.useTls);
+  }
+
+  Future<Locale?> locale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final localeText = prefs.getString('locale');
+    if (localeText == null) {
+      return null;
+    }
+
+    return supportedLocales
+        .firstWhereOrNull((element) => element.item1 == localeText)
+        ?.item2;
+  }
+
+  Future<void> updateLocale(Locale? locale) async {
+    final localeText = supportedLocales
+        .firstWhereOrNull((element) => element.item2 == locale)
+        ?.item1;
+
+    final prefs = await SharedPreferences.getInstance();
+
+    if (localeText != null) {
+      await prefs.setString('locale', localeText);
+    } else {
+      await prefs.remove('locale');
+    }
   }
 }
 

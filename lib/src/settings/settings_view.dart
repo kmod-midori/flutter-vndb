@@ -1,3 +1,4 @@
+import 'package:flt_vndb/src/data/locales.dart';
 import 'package:flt_vndb/src/settings/api_settings_dialog.dart';
 import 'package:flt_vndb/src/settings/settings_service.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,8 @@ class SettingsView extends StatelessWidget {
           ),
         ),
         ListTile(
-          title: Text("API"),
+          title: Text(l10n.apiAddress),
+          subtitle: Text(l10n.apiAddressDescription),
           onTap: () async {
             final newApiConfig = await showDialog<ApiConfig>(
               context: context,
@@ -64,7 +66,21 @@ class SettingsView extends StatelessWidget {
               settingsController.updateApiConfig(newApiConfig);
             }
           },
-        )
+        ),
+        ListTile(
+          title: Text(l10n.language),
+          trailing: DropdownButton<Locale?>(
+              value: settingsController.locale,
+              onChanged: (value) {
+                settingsController.updateLocale(value);
+              },
+              items: [
+                DropdownMenuItem(value: null, child: Text(l10n.systemLanguage)),
+                ...supportedLocales.map(
+                  (e) => DropdownMenuItem(value: e.item2, child: Text(e.item1)),
+                )
+              ]),
+        ),
       ]).toList(),
     );
 

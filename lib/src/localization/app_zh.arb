@@ -27,5 +27,12 @@
   "lengthShort": "短",
   "lengthMedium": "中等",
   "lengthLong": "长",
-  "lengthVeryLong": "极长"
+  "lengthVeryLong": "极长",
+  "language": "语言",
+  "systemLanguage": "系统语言",
+  "apiAddress": "API 地址",
+  "apiAddressDescription": "如果你想使用自己的 API 服务器，请在这里输入地址",
+  "host": "域名/IP",
+  "port": "端口",
+  "useTls": "使用 TLS"
 }
