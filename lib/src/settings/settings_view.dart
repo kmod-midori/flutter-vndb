@@ -18,6 +18,7 @@ class SettingsView extends StatelessWidget {
 
     final body = ListView(
       children: ListTile.divideTiles(context: context, tiles: <Widget>[
+        // Localized Title
         ListTile(
           title: Text(l10n.localizedTitle),
           subtitle: Text(l10n.localizedTitleDescription),
@@ -26,6 +27,7 @@ class SettingsView extends StatelessWidget {
             onChanged: settingsController.updateLocalizedTitle,
           ),
         ),
+        // Theme
         ListTile(
           title: Text(l10n.theme),
           trailing: DropdownButton<ThemeMode>(
@@ -51,6 +53,7 @@ class SettingsView extends StatelessWidget {
             ],
           ),
         ),
+        // API Address
         ListTile(
           title: Text(l10n.apiAddress),
           subtitle: Text(l10n.apiAddressDescription),
@@ -67,19 +70,21 @@ class SettingsView extends StatelessWidget {
             }
           },
         ),
+        // Language Override
         ListTile(
           title: Text(l10n.language),
           trailing: DropdownButton<Locale?>(
-              value: settingsController.locale,
-              onChanged: (value) {
-                settingsController.updateLocale(value);
-              },
-              items: [
-                DropdownMenuItem(value: null, child: Text(l10n.systemLanguage)),
-                ...supportedLocales.map(
-                  (e) => DropdownMenuItem(value: e.item2, child: Text(e.item1)),
-                )
-              ]),
+            value: settingsController.locale,
+            onChanged: (value) {
+              settingsController.updateLocale(value);
+            },
+            items: [
+              DropdownMenuItem(value: null, child: Text(l10n.systemLanguage)),
+              ...supportedLocales.map(
+                (e) => DropdownMenuItem(value: e.item2, child: Text(e.item1)),
+              )
+            ],
+          ),
         ),
       ]).toList(),
     );

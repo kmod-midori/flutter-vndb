@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flt_vndb/src/api/vn.dart';
-import 'package:flt_vndb/src/sample_feature/visual_novel_item.dart';
+import 'package:flt_vndb/src/ui/visual_novel_item.dart';
 import 'package:flt_vndb/src/utils/hooks.dart';
 import 'package:flt_vndb/src/widgets/language_row.dart';
 import 'package:flutter/material.dart';

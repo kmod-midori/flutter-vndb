@@ -1,6 +1,6 @@
 import 'package:flt_vndb/src/api/api.dart';
 import 'package:flt_vndb/src/api/vn.dart';
-import 'package:flt_vndb/src/sample_feature/visual_novel_details.dart';
+import 'package:flt_vndb/src/ui/visual_novel_details.dart';
 import 'package:flt_vndb/src/utils/hooks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

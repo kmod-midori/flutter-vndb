@@ -1,8 +1,8 @@
 import 'package:flt_vndb/src/api/api.dart';
 import 'package:flt_vndb/src/api/vn.dart';
-import 'package:flt_vndb/src/sample_feature/detail_pages/info.dart';
-import 'package:flt_vndb/src/sample_feature/detail_pages/releases.dart';
-import 'package:flt_vndb/src/sample_feature/detail_pages/tags.dart';
+import 'package:flt_vndb/src/ui/detail_pages/info.dart';
+import 'package:flt_vndb/src/ui/detail_pages/releases.dart';
+import 'package:flt_vndb/src/ui/detail_pages/tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
