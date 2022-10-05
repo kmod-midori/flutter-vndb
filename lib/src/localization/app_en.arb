@@ -15,10 +15,11 @@
   "@settingsTitle": {
     "description": "The title of the settings page"
   },
-  "localizedTitle": "Localized Title",
-  "@localizedTitle": {},
-  "localizedTitleDescription": "Use localized version of title wherever possible",
-  "@localizedTitleDescription": {},
+  "titleLanguage": "Title Language",
+  "titleLanguageDescription": "The language to display for titles",
+  "titleLanguageLocalized": "Localized",
+  "titleLanguageRomaji": "Romaji",
+  "titleLanguageOriginal": "Original",
   "basicInfo": "Basic Info",
   "popularity": "Popularity",
   "rating": "Rating",

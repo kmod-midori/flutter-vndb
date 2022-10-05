@@ -1,4 +1,5 @@
 import 'package:flt_vndb/src/data/locales.dart';
+import 'package:flt_vndb/src/ui/search_query_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -67,13 +68,17 @@ class MyApp extends StatelessWidget {
                 switch (routeSettings.name) {
                   case SettingsView.routeName:
                     return const SettingsView();
+                  case VisualNovelListView.routeName:
+                    return VisualNovelListView.fromRouteSettings(
+                      routeSettings,
+                    );
                   case VisualNovelDetailsView.routeName:
                     return VisualNovelDetailsView.fromRouteSettings(
                       routeSettings,
                     );
-                  case VisualNovelListView.routeName:
+                  case SearchQueryPage.routeName:
                   default:
-                    return const VisualNovelListView();
+                    return const SearchQueryPage();
                 }
               },
             );

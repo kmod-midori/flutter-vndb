@@ -11,11 +11,21 @@ import 'visual_novel_list.dart';
 
 /// Displays a list of SampleItems.
 class VisualNovelListView extends HookWidget {
+  final String filter;
+
   const VisualNovelListView({
+    required this.filter,
     super.key,
   });
 
-  static const routeName = '/';
+  factory VisualNovelListView.fromRouteSettings(RouteSettings settings) {
+    final arguments = settings.arguments as Map<String, dynamic>;
+    return VisualNovelListView(
+      filter: arguments["filter"],
+    );
+  }
+
+  static const routeName = '/vn_list';
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +43,8 @@ class VisualNovelListView extends HookWidget {
     }, [isMobileLayout]);
 
     final listBody = VisualNovelList(
-      filter: '(platforms = "swi")',
+      // filter: '(platforms = "swi")',
+      filter: filter,
       sort: VnSort.rating,
       reverse: true,
       onItemClick: (vn) {
@@ -56,12 +67,7 @@ class VisualNovelListView extends HookWidget {
       appBar: AppBar(
         title: Text(l10n.searchResults),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.restorablePushNamed(context, SettingsView.routeName);
-            },
-          ),
+          const SettingsIconButton(),
         ],
       ),
       body: listBody,

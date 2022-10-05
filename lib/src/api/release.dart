@@ -1,3 +1,4 @@
+import 'package:flt_vndb/src/settings/settings_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -76,10 +77,15 @@ class Release {
 
     final settings = SettingsController.of(context);
 
-    if (!settings.localizedTitle) {
+    if (settings.titleLanguage == TitleLanguage.romaji) {
       return this.title!;
+    } else if (settings.titleLanguage == TitleLanguage.original) {
+      if (original != null) {
+        return original!;
+      } else {
+        return this.title!;
+      }
     }
-
     final availableLocales = lang?.where((t) => t.title != null).map((t) {
       final p = t.lang.indexOf('-');
       if (p == -1) {
@@ -102,7 +108,12 @@ class Release {
       ]);
 
       if (titleLocale != undLocale) {
-        title = lang![availableLocales.indexOf(titleLocale)].title!;
+        final matchedTitle = lang![availableLocales.indexOf(titleLocale)].title;
+        if (matchedTitle != null) {
+          title = matchedTitle;
+        } else {
+          title = lang!.firstWhere((l) => l.main).title!;
+        }
       }
     }
 

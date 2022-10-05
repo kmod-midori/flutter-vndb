@@ -19,12 +19,38 @@ class SettingsView extends StatelessWidget {
     final body = ListView(
       children: ListTile.divideTiles(context: context, tiles: <Widget>[
         // Localized Title
+        // ListTile(
+        //   title: Text(l10n.localizedTitle),
+        //   subtitle: Text(l10n.localizedTitleDescription),
+        //   trailing: Switch(
+        //     value: settingsController.localizedTitle,
+        //     onChanged: settingsController.updateLocalizedTitle,
+        //   ),
+        // ),
         ListTile(
-          title: Text(l10n.localizedTitle),
-          subtitle: Text(l10n.localizedTitleDescription),
-          trailing: Switch(
-            value: settingsController.localizedTitle,
-            onChanged: settingsController.updateLocalizedTitle,
+          title: Text(l10n.titleLanguage),
+          subtitle: Text(l10n.titleLanguageDescription),
+          trailing: ToggleButtons(
+            onPressed: (index) {
+              settingsController.updateTitleLanguage(
+                TitleLanguage.values[index],
+              );
+            },
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            constraints: const BoxConstraints(
+              minHeight: 30.0,
+              minWidth: 120.0,
+            ),
+            isSelected: [
+              settingsController.titleLanguage == TitleLanguage.localized,
+              settingsController.titleLanguage == TitleLanguage.romaji,
+              settingsController.titleLanguage == TitleLanguage.original,
+            ],
+            children: [
+              Text(l10n.titleLanguageLocalized),
+              Text(l10n.titleLanguageRomaji),
+              Text(l10n.titleLanguageOriginal),
+            ],
           ),
         ),
         // Theme
@@ -94,6 +120,20 @@ class SettingsView extends StatelessWidget {
         title: Text(l10n.settingsTitle),
       ),
       body: body,
+    );
+  }
+}
+
+class SettingsIconButton extends StatelessWidget {
+  const SettingsIconButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.settings),
+      onPressed: () {
+        Navigator.restorablePushNamed(context, SettingsView.routeName);
+      },
     );
   }
 }

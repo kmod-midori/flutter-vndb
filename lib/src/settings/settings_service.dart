@@ -66,6 +66,17 @@ class SettingsService {
       await prefs.remove('locale');
     }
   }
+
+  Future<TitleLanguage> titleLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final titleLanguage = prefs.getInt('titleLanguage') ?? 1;
+    return TitleLanguage.values[titleLanguage];
+  }
+
+  Future<void> updateTitleLanguage(TitleLanguage titleLanguage) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('titleLanguage', titleLanguage.index);
+  }
 }
 
 class ApiConfig {
@@ -97,4 +108,11 @@ class ApiConfig {
 
   @override
   int get hashCode => address.hashCode ^ port.hashCode ^ useTls.hashCode;
+}
+
+// Do not change the order of this list.
+enum TitleLanguage {
+  localized,
+  romaji,
+  original,
 }

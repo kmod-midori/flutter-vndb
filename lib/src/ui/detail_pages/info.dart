@@ -26,8 +26,10 @@ class MainPage extends HookWidget {
       children: [
         Row(
           children: <Widget>[
-            Text(vn.getLocalizedTitle(context),
-                style: Theme.of(context).textTheme.titleLarge),
+            SelectableText(
+              vn.getLocalizedTitle(context),
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(width: 16.0),
             if (vn.titles != null)
               IconButton(
@@ -40,7 +42,7 @@ class MainPage extends HookWidget {
           ],
         ),
         if (vn.original != null)
-          Text(
+          SelectableText(
             vn.original!,
             style: Theme.of(context).textTheme.caption,
           ),
@@ -163,6 +165,7 @@ class MainPage extends HookWidget {
       children.add(
         BBCodeText(
           data: vn.description!,
+          selectable: true,
           defaultStyle: theme.textTheme.bodySmall,
         ),
       );
@@ -189,7 +192,7 @@ Future<void> showTitlesDialog(
       children: [
         LanguageIcon(code: title.lang),
         const SizedBox(width: 8.0),
-        Text(title.title, style: textTheme.subtitle1),
+        SelectableText(title.title, style: textTheme.subtitle1),
         if (!title.official) ...[
           const SizedBox(width: 8.0),
           Text(l10n.unofficial, style: textTheme.caption)
@@ -197,7 +200,7 @@ Future<void> showTitlesDialog(
       ],
     ));
     if (title.latin != null) {
-      children.add(Text(title.latin!, style: textTheme.bodyMedium));
+      children.add(SelectableText(title.latin!, style: textTheme.bodyMedium));
     }
     children.add(const Divider());
   }

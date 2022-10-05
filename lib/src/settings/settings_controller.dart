@@ -18,14 +18,14 @@ class SettingsController with ChangeNotifier {
   late ThemeMode _themeMode;
   ThemeMode get themeMode => _themeMode;
 
-  late bool _localizedTitle;
-  bool get localizedTitle => _localizedTitle;
-
   late ApiConfig _apiConfig;
   ApiConfig get apiConfig => _apiConfig;
 
   late Locale? _locale;
   Locale? get locale => _locale;
+
+  late TitleLanguage _titleLanguage;
+  TitleLanguage get titleLanguage => _titleLanguage;
 
   static SettingsController of(BuildContext context) {
     return Provider.of<SettingsController>(context);
@@ -34,9 +34,9 @@ class SettingsController with ChangeNotifier {
   /// Load the user's settings from the SettingsService.
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
-    _localizedTitle = await _settingsService.localizedTitle();
     _apiConfig = await _settingsService.apiConfig();
     _locale = await _settingsService.locale();
+    _titleLanguage = await _settingsService.titleLanguage();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -48,15 +48,6 @@ class SettingsController with ChangeNotifier {
     _themeMode = newThemeMode;
     notifyListeners();
     await _settingsService.updateThemeMode(newThemeMode);
-  }
-
-  Future<void> updateLocalizedTitle(bool newLocalizedTitle) async {
-    if (newLocalizedTitle == _localizedTitle) {
-      return;
-    }
-    _localizedTitle = newLocalizedTitle;
-    notifyListeners();
-    await _settingsService.updateLocalizedTitle(newLocalizedTitle);
   }
 
   Future<void> updateApiConfig(ApiConfig newApiConfig) async {
@@ -76,5 +67,14 @@ class SettingsController with ChangeNotifier {
     _locale = newLocale;
     notifyListeners();
     await _settingsService.updateLocale(newLocale);
+  }
+
+  Future<void> updateTitleLanguage(TitleLanguage newTitleLanguage) async {
+    if (newTitleLanguage == _titleLanguage) {
+      return;
+    }
+    _titleLanguage = newTitleLanguage;
+    notifyListeners();
+    await _settingsService.updateTitleLanguage(newTitleLanguage);
   }
 }

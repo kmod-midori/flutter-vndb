@@ -1,6 +1,6 @@
+import 'package:flt_vndb/src/settings/settings_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:provider/provider.dart';
 
 import 'package:flt_vndb/src/settings/settings_controller.dart';
 
@@ -76,9 +76,19 @@ class VisualNovel {
 
     final settings = SettingsController.of(context);
 
-    if (!settings.localizedTitle) {
+    if (settings.titleLanguage == TitleLanguage.romaji) {
       return this.title!;
+    } else if (settings.titleLanguage == TitleLanguage.original) {
+      if (original != null) {
+        return original!;
+      } else {
+        return this.title!;
+      }
     }
+
+    // if (!settings.localizedTitle) {
+    //   return this.title!;
+    // }
 
     final availableLocales = titles?.map((t) {
       final p = t.lang.indexOf('-');
