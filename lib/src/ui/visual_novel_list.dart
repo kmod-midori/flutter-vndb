@@ -1,4 +1,4 @@
-import 'package:flt_vndb/src/api/api.dart';
+import 'package:flt_vndb/src/api/http_api.dart';
 import 'package:flt_vndb/src/api/vn.dart';
 import 'package:flt_vndb/src/utils/use_paging_controller.dart';
 import 'package:flutter/material.dart';
@@ -9,22 +9,29 @@ import 'visual_novel_item.dart';
 
 /// Displays a list of visual novels.
 class VisualNovelList extends HookWidget {
-  final String filter;
-  final VnSort? sort;
-  final bool? reverse;
+  final ApiQuery query;
 
-  final int? selectedId;
+  final String? selectedId;
 
   final void Function(VisualNovel)? onItemClick;
 
-  const VisualNovelList({
-    required this.filter,
-    this.sort,
-    this.reverse,
+  VisualNovelList({
+    required ApiQuery query,
     this.onItemClick,
     this.selectedId,
     super.key,
-  });
+  }) : query = query.copyWith(fields: [
+          "title",
+          "alttitle",
+          "released",
+          "titles{lang,title,latin,official,main}",
+          "languages",
+          "platforms",
+          "image.url",
+          "rating",
+          "popularity",
+          "votecount"
+        ]);
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +41,14 @@ class VisualNovelList extends HookWidget {
     useEffect(() {
       callback(int pageKey) async {
         try {
-          final items = await vndbApi.getVn([
-            VnFlag.basic,
-            VnFlag.details,
-            VnFlag.titles,
-            VnFlag.stats
-          ], filter, page: pageKey, results: 25, sort: sort, reverse: reverse);
+          final items = await vndbHttpApi.queryVisualNovels(
+            query.copyWith(page: pageKey),
+          );
 
           if (items.more) {
-            pagingController.appendPage(items.items, pageKey + 1);
+            pagingController.appendPage(items.results, pageKey + 1);
           } else {
-            pagingController.appendLastPage(items.items);
+            pagingController.appendLastPage(items.results);
           }
         } catch (e) {
           try {

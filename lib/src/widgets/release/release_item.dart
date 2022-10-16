@@ -44,7 +44,7 @@ class ReleaseItem extends StatelessWidget {
         ],
         if (release.languages != null && release.languages!.isNotEmpty) ...[
           const SizedBox(height: 4.0),
-          LanguageRow(codes: release.languages!)
+          LanguageRow(codes: release.languages!.map((l) => l.lang).toList())
         ],
       ],
     );
@@ -61,7 +61,7 @@ class ReleaseItem extends StatelessWidget {
       if (release.isDownload)
         labelledIcon(MdiIcons.download, "Internet download"),
       if (release.isDisc) labelledIcon(MdiIcons.disc, "Physical Disc"),
-      if (release.isVoiced) labelledIcon(MdiIcons.microphone, "Voiced"),
+      // if (release.isVoiced) labelledIcon(MdiIcons.microphone, "Voiced"),
     ];
 
     return Container(

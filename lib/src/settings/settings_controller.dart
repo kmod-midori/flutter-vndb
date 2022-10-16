@@ -1,4 +1,3 @@
-import 'package:flt_vndb/src/api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +54,7 @@ class SettingsController with ChangeNotifier {
       return;
     }
     _apiConfig = newApiConfig;
-    vndbApi.configure(newApiConfig);
+    // vndbApi.configure(newApiConfig);
     notifyListeners();
     await _settingsService.updateApiConfig(newApiConfig);
   }

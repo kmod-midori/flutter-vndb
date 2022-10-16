@@ -11,12 +11,12 @@ import 'package:flutter_bbcode/tags/tag_parser.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class MainPage extends HookWidget {
   final VisualNovel vn;
-  final VisualNovel? vnDetail;
 
-  const MainPage(this.vn, this.vnDetail, {super.key});
+  const MainPage(this.vn, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +34,12 @@ class MainPage extends HookWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(width: 16.0),
+            IconButton(
+              icon: const Icon(Icons.open_in_browser),
+              onPressed: () {
+                launchUrlString("https://vndb.org/${vn.id}");
+              },
+            ),
             if (vn.titles != null)
               IconButton(
                 icon: const Icon(Icons.translate),
@@ -44,21 +50,20 @@ class MainPage extends HookWidget {
               )
           ],
         ),
-        if (vn.original != null)
+        if (vn.alttitle != null)
           SelectableText(
-            vn.original!,
+            vn.alttitle!,
             style: Theme.of(context).textTheme.caption,
           ),
+        Text(
+          vn.id,
+          style: Theme.of(context).textTheme.caption,
+        ),
       ],
     );
 
-    final thumbnail = vn.image != null
-        ? VisualNovelThumbnail(
-            vn.image!,
-            width: vn.imageWidth?.toDouble(),
-            height: vn.imageHeight?.toDouble(),
-          )
-        : null;
+    final thumbnail =
+        vn.imageUrl != null ? VisualNovelThumbnail(vn.imageUrl!) : null;
 
     final lengthToText = {
       1: l10n.lengthVeryShort,
@@ -70,7 +75,7 @@ class MainPage extends HookWidget {
 
     String? lengthDescription;
     if (vn.length != null) {
-      lengthDescription = lengthToText[vn.length]!;
+      lengthDescription = lengthToText[vn.length!]!;
       if (vn.lengthText != null) {
         lengthDescription += " (${vn.lengthText}";
         if (vn.lengthVotes != null) {
@@ -94,16 +99,16 @@ class MainPage extends HookWidget {
                 title: Text(l10n.releaseDate),
                 trailing: Text(vn.released!),
               ),
-            if (vn.popularity != null)
-              ListTile(
-                title: Text(l10n.popularity),
-                trailing: Text(vn.popularity.toString()),
-              ),
-            if (vn.rating != null)
-              ListTile(
-                title: Text(l10n.rating),
-                trailing: Text(vn.rating.toString()),
-              ),
+            // if (vn.popularity != null)
+            //   ListTile(
+            //     title: Text(l10n.popularity),
+            //     trailing: Text(vn.popularity.toString()),
+            //   ),
+            // if (vn.rating != null)
+            //   ListTile(
+            //     title: Text(l10n.rating),
+            //     trailing: Text(vn.rating.toString()),
+            //   ),
             if (lengthDescription != null)
               ListTile(
                 title: Text(l10n.length),
@@ -111,7 +116,7 @@ class MainPage extends HookWidget {
               ),
           ]),
         ),
-        if (vn.aliases != null)
+        if (vn.aliases != null && vn.aliases!.isNotEmpty)
           ExpansionPanelRadio(
             value: "aliases",
             headerBuilder: ((context, isExpanded) => ListTile(
@@ -120,7 +125,6 @@ class MainPage extends HookWidget {
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: vn.aliases!
-                  .split("\n")
                   .map((t) => ListTile(title: SelectableText(t)))
                   .toList(),
             ),
@@ -143,14 +147,13 @@ class MainPage extends HookWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (thumbnail != null) ...[
-            Flexible(
-              flex: 1,
+            SizedBox(
+              width: 240,
               child: thumbnail,
             ),
             const SizedBox(width: 16.0),
           ],
-          Flexible(
-            flex: 4,
+          Expanded(
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),

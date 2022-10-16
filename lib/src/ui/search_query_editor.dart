@@ -1,5 +1,5 @@
-import 'dart:convert';
-
+import 'package:flt_vndb/src/api/filter.dart';
+import 'package:flt_vndb/src/api/http_api.dart';
 import 'package:flt_vndb/src/settings/settings_view.dart';
 import 'package:flt_vndb/src/ui/visual_novel_list_view.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +21,19 @@ class SearchQueryEditor extends HookWidget {
             suffixIcon: IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
+                final query = ApiQuery(
+                  filters: StringFilter(
+                    "search",
+                    FilterOperator.eq,
+                    controller.value.text,
+                  ).toFilterJson(),
+                  fields: [],
+                );
                 Navigator.restorablePushNamed(
                   context,
                   VisualNovelListView.routeName,
                   arguments: {
-                    "filter": "(title ~ ${json.encode(controller.text)})",
+                    "query": query.toJson(),
                   },
                 );
               },

@@ -1,76 +1,24 @@
-import 'package:flt_vndb/src/settings/settings_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:flt_vndb/src/settings/settings_controller.dart';
+import 'package:flt_vndb/src/settings/settings_service.dart';
 
 part 'release.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class Release {
-  final int id;
-
-  // === basic ===
+  /// vndbid.
+  final String id;
 
   /// Release title (romaji)
   final String? title;
 
   /// Original/official title of the release.
-  final String? original;
-
-  /// Release date
-  final String? released;
-
-  final bool? patch;
-
-  final bool? freeware;
-
-  final bool? official;
-
-  final List<String>? languages;
-
-  // === details ===
-
-  /// Official website URL
-  final String? website;
-
-  ///	Random notes, can contain formatting codes as described in d9#3
-  final String? notes;
-
-  /// Age rating, 0 = all ages.
-  final int? minage;
-
-  /// JAN/UPC/EAN code. This is actually an integer, but formatted as a string to avoid an overflow on 32bit platforms.
-  final String? gtin;
-
-  /// Catalog number.
-  final String? catalog;
-
-  /// Empty array when platform is unknown.
-  final List<String>? platforms;
-
-  final List<ReleaseMedia>? media;
-
-  bool get isDownload => media?.any((e) => e.medium == 'in') ?? false;
-
-  bool get isDisc =>
-      media?.any((e) => e.medium == 'cd' || e.medium == 'dvd') ?? false;
-
-  final String? resolution;
-
-  /// 1 = Not voiced, 2 = Only ero scenes voiced, 3 = Partially voiced, 4 = Fully voiced
-  final ReleaseVoiceStatus? voiced;
-  bool get isVoiced => voiced != null && voiced != ReleaseVoiceStatus.notVoiced;
-
-  /// The array has two integer members, the first one indicating the story animations, the second the ero scene animations. Both members can be null if unknown or not applicable.
-  ///
-  /// When not null, the number indicates the following: 1 = No animations, 2 = Simple animations, 3 = Some fully animated scenes, 4 = All scenes fully animated.
-  final List<int?>? animation;
-
-  // === lang ===
+  final String? alttitle;
 
   /// List of languages with associated metadata.
-  final List<ReleaseLanguage>? lang;
+  final List<ReleaseLanguage>? languages;
 
   String getLocalizedTitle(BuildContext context) {
     assert(this.title != null);
@@ -80,13 +28,13 @@ class Release {
     if (settings.titleLanguage == TitleLanguage.romaji) {
       return this.title!;
     } else if (settings.titleLanguage == TitleLanguage.original) {
-      if (original != null) {
-        return original!;
+      if (alttitle != null) {
+        return alttitle!;
       } else {
         return this.title!;
       }
     }
-    final availableLocales = lang?.where((t) => t.title != null).map((t) {
+    final availableLocales = languages?.where((t) => t.title != null).map((t) {
       final p = t.lang.indexOf('-');
       if (p == -1) {
         return Locale(t.lang);
@@ -108,17 +56,75 @@ class Release {
       ]);
 
       if (titleLocale != undLocale) {
-        final matchedTitle = lang![availableLocales.indexOf(titleLocale)].title;
+        final matchedTitle =
+            languages![availableLocales.indexOf(titleLocale)].title;
         if (matchedTitle != null) {
           title = matchedTitle;
         } else {
-          title = lang!.firstWhere((l) => l.main).title!;
+          title = languages!.firstWhere((l) => l.main).title!;
         }
       }
     }
 
     return title;
   }
+
+  /// Empty array when platform is unknown.
+  final List<String>? platforms;
+
+  final List<ReleaseMedia>? media;
+
+  bool get isDownload => media?.any((e) => e.medium == 'in') ?? false;
+
+  bool get isDisc =>
+      media?.any((e) => e.medium == 'cd' || e.medium == 'dvd') ?? false;
+
+  /// Release date
+  final String? released;
+
+  /// Age rating, 0 = all ages.
+  final int? minage;
+
+  final bool? patch;
+
+  final bool? freeware;
+
+  final bool? uncensored;
+
+  final bool? official;
+
+  final bool? hasEro;
+
+  // TODO: resolution
+
+  final String? engine;
+
+  ///	Random notes, can contain formatting codes as described in d9#3
+  final String? notes;
+
+  // === details ===
+
+  // /// Official website URL
+  // final String? website;
+
+  // /// JAN/UPC/EAN code. This is actually an integer, but formatted as a string to avoid an overflow on 32bit platforms.
+  // final String? gtin;
+
+  // /// Catalog number.
+  // final String? catalog;
+
+  // final String? resolution;
+
+  // /// 1 = Not voiced, 2 = Only ero scenes voiced, 3 = Partially voiced, 4 = Fully voiced
+  // final ReleaseVoiceStatus? voiced;
+  // bool get isVoiced => voiced != null && voiced != ReleaseVoiceStatus.notVoiced;
+
+  // /// The array has two integer members, the first one indicating the story animations, the second the ero scene animations. Both members can be null if unknown or not applicable.
+  // ///
+  // /// When not null, the number indicates the following: 1 = No animations, 2 = Simple animations, 3 = Some fully animated scenes, 4 = All scenes fully animated.
+  // final List<int?>? animation;
+
+  // === lang ===
 
   // === vn ===
   // TODO: vn
@@ -127,29 +133,24 @@ class Release {
   // TODO: producers
 
   // === links ===
-  final List<ReleaseLink>? links;
+  // final List<ReleaseLink>? links;
 
   Release({
     required this.id,
     this.title,
-    this.original,
-    this.released,
-    this.patch,
-    this.freeware,
-    this.official,
+    this.alttitle,
     this.languages,
-    this.website,
-    this.notes,
-    this.minage,
-    this.gtin,
-    this.catalog,
     this.platforms,
     this.media,
-    this.resolution,
-    this.voiced,
-    this.animation,
-    this.lang,
-    this.links,
+    this.released,
+    this.minage,
+    this.patch,
+    this.freeware,
+    this.uncensored,
+    this.official,
+    this.hasEro,
+    this.engine,
+    this.notes,
   });
 
   factory Release.fromJson(Map<String, dynamic> json) =>
@@ -158,19 +159,22 @@ class Release {
   Map<String, dynamic> toJson() => _$ReleaseToJson(this);
 }
 
+/// Use at least `languages{lang,title,main}`.
 @JsonSerializable()
 class ReleaseLanguage {
   /// language the release is available in
   final String lang;
 
   /// title in the original script
+  ///
+  /// Can be null, in which case the title for this language is the same as the “main” language.
   final String? title;
 
   /// romanized version of "title"
   final String? latin;
 
   /// whether this is a machine translation
-  final bool mtl;
+  final bool? mtl;
 
   /// whether this title is used as main title for the release entry
   ///
@@ -181,7 +185,7 @@ class ReleaseLanguage {
     required this.lang,
     this.title,
     this.latin,
-    required this.mtl,
+    this.mtl,
     required this.main,
   });
 

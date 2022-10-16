@@ -54,8 +54,10 @@ class VisualNovelItem extends StatelessWidget {
       const SizedBox(height: 4.0),
       LanguageRow(codes: item.languages!),
       const SizedBox(height: 4.0),
-      detailRow("${l10n.popularity} ${item.popularity}"),
-      detailRow("${l10n.rating} ${item.rating} (${item.votecount})"),
+      if (item.popularity != null)
+        detailRow("${l10n.popularity} ${item.popularity}"),
+      if (item.rating != null && item.votecount != null)
+        detailRow("${l10n.rating} ${item.rating} (${item.votecount})"),
     ];
 
     return InkWell(
@@ -66,13 +68,11 @@ class VisualNovelItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (item.image != null)
+            if (item.image?.url != null)
               SizedBox(
                 width: 90,
                 child: VisualNovelThumbnail(
-                  item.image!,
-                  width: item.imageWidth?.toDouble(),
-                  height: item.imageHeight?.toDouble(),
+                  item.image!.url!,
                 ),
               ),
             Expanded(

@@ -1,4 +1,3 @@
-import 'package:flt_vndb/src/api/api.dart';
 import 'package:flt_vndb/src/data/tags.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
@@ -24,7 +23,7 @@ void main() async {
   // This prevents a sudden theme change when the app is first displayed.
   await settingsController.loadSettings();
 
-  vndbApi.configure(settingsController.apiConfig);
+  // vndbApi.configure(settingsController.apiConfig);
 
   // Load the tags from the JSON file.
   await loadTags();

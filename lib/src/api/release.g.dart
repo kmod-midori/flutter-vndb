@@ -7,75 +7,53 @@ part of 'release.dart';
 // **************************************************************************
 
 Release _$ReleaseFromJson(Map<String, dynamic> json) => Release(
-      id: json['id'] as int,
+      id: json['id'] as String,
       title: json['title'] as String?,
-      original: json['original'] as String?,
-      released: json['released'] as String?,
-      patch: json['patch'] as bool?,
-      freeware: json['freeware'] as bool?,
-      official: json['official'] as bool?,
+      alttitle: json['alttitle'] as String?,
       languages: (json['languages'] as List<dynamic>?)
-          ?.map((e) => e as String)
+          ?.map((e) => ReleaseLanguage.fromJson(e as Map<String, dynamic>))
           .toList(),
-      website: json['website'] as String?,
-      notes: json['notes'] as String?,
-      minage: json['minage'] as int?,
-      gtin: json['gtin'] as String?,
-      catalog: json['catalog'] as String?,
       platforms: (json['platforms'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
       media: (json['media'] as List<dynamic>?)
           ?.map((e) => ReleaseMedia.fromJson(e as Map<String, dynamic>))
           .toList(),
-      resolution: json['resolution'] as String?,
-      voiced: $enumDecodeNullable(_$ReleaseVoiceStatusEnumMap, json['voiced']),
-      animation:
-          (json['animation'] as List<dynamic>?)?.map((e) => e as int?).toList(),
-      lang: (json['lang'] as List<dynamic>?)
-          ?.map((e) => ReleaseLanguage.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      links: (json['links'] as List<dynamic>?)
-          ?.map((e) => ReleaseLink.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      released: json['released'] as String?,
+      minage: json['minage'] as int?,
+      patch: json['patch'] as bool?,
+      freeware: json['freeware'] as bool?,
+      uncensored: json['uncensored'] as bool?,
+      official: json['official'] as bool?,
+      hasEro: json['has_ero'] as bool?,
+      engine: json['engine'] as String?,
+      notes: json['notes'] as String?,
     );
 
 Map<String, dynamic> _$ReleaseToJson(Release instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'original': instance.original,
-      'released': instance.released,
-      'patch': instance.patch,
-      'freeware': instance.freeware,
-      'official': instance.official,
+      'alttitle': instance.alttitle,
       'languages': instance.languages,
-      'website': instance.website,
-      'notes': instance.notes,
-      'minage': instance.minage,
-      'gtin': instance.gtin,
-      'catalog': instance.catalog,
       'platforms': instance.platforms,
       'media': instance.media,
-      'resolution': instance.resolution,
-      'voiced': _$ReleaseVoiceStatusEnumMap[instance.voiced],
-      'animation': instance.animation,
-      'lang': instance.lang,
-      'links': instance.links,
+      'released': instance.released,
+      'minage': instance.minage,
+      'patch': instance.patch,
+      'freeware': instance.freeware,
+      'uncensored': instance.uncensored,
+      'official': instance.official,
+      'has_ero': instance.hasEro,
+      'engine': instance.engine,
+      'notes': instance.notes,
     };
-
-const _$ReleaseVoiceStatusEnumMap = {
-  ReleaseVoiceStatus.notVoiced: 1,
-  ReleaseVoiceStatus.onlyEroScenesVoiced: 2,
-  ReleaseVoiceStatus.partiallyVoiced: 3,
-  ReleaseVoiceStatus.fullyVoiced: 4,
-};
 
 ReleaseLanguage _$ReleaseLanguageFromJson(Map<String, dynamic> json) =>
     ReleaseLanguage(
       lang: json['lang'] as String,
       title: json['title'] as String?,
       latin: json['latin'] as String?,
-      mtl: json['mtl'] as bool,
+      mtl: json['mtl'] as bool?,
       main: json['main'] as bool,
     );
 

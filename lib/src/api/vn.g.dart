@@ -7,9 +7,16 @@ part of 'vn.dart';
 // **************************************************************************
 
 VisualNovel _$VisualNovelFromJson(Map<String, dynamic> json) => VisualNovel(
-      id: json['id'] as int,
+      id: json['id'] as String,
       title: json['title'] as String?,
-      original: json['original'] as String?,
+      alttitle: json['alttitle'] as String?,
+      titles: (json['titles'] as List<dynamic>?)
+          ?.map((e) => VisualNovelTitle.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      aliases:
+          (json['aliases'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      olang: json['olang'] as String?,
+      devstatus: json['devstatus'] as int?,
       released: json['released'] as String?,
       languages: (json['languages'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -17,55 +24,38 @@ VisualNovel _$VisualNovelFromJson(Map<String, dynamic> json) => VisualNovel(
       platforms: (json['platforms'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      aliases: json['aliases'] as String?,
+      image: json['image'] == null
+          ? null
+          : VisualNovelImage.fromJson(json['image'] as Map<String, dynamic>),
       length: json['length'] as int?,
       lengthMinutes: json['length_minutes'] as int?,
       lengthVotes: json['length_votes'] as int?,
       description: json['description'] as String?,
-      image: json['image'] as String?,
-      imageWidth: json['image_width'] as int?,
-      imageHeight: json['image_height'] as int?,
-      titles: (json['titles'] as List<dynamic>?)
-          ?.map((e) => VisualNovelTitle.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      relations: (json['relations'] as List<dynamic>?)
-          ?.map((e) => VisualNovelRelation.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      tags: (json['tags'] as List<dynamic>?)
-          ?.map((e) =>
-              (e as List<dynamic>).map((e) => (e as num).toDouble()).toList())
-          .toList(),
       popularity: (json['popularity'] as num?)?.toDouble(),
       rating: (json['rating'] as num?)?.toDouble(),
       votecount: json['votecount'] as int?,
-      staff: (json['staff'] as List<dynamic>?)
-          ?.map((e) => VisualNovelStaff.fromJson(e as Map<String, dynamic>))
-          .toList(),
     );
 
 Map<String, dynamic> _$VisualNovelToJson(VisualNovel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'original': instance.original,
+      'alttitle': instance.alttitle,
+      'titles': instance.titles?.map((e) => e.toJson()).toList(),
+      'aliases': instance.aliases,
+      'olang': instance.olang,
+      'devstatus': instance.devstatus,
       'released': instance.released,
       'languages': instance.languages,
       'platforms': instance.platforms,
-      'aliases': instance.aliases,
+      'image': instance.image?.toJson(),
       'length': instance.length,
       'length_minutes': instance.lengthMinutes,
       'length_votes': instance.lengthVotes,
       'description': instance.description,
-      'image': instance.image,
-      'image_width': instance.imageWidth,
-      'image_height': instance.imageHeight,
-      'titles': instance.titles?.map((e) => e.toJson()).toList(),
-      'relations': instance.relations?.map((e) => e.toJson()).toList(),
-      'tags': instance.tags,
       'popularity': instance.popularity,
       'rating': instance.rating,
       'votecount': instance.votecount,
-      'staff': instance.staff?.map((e) => e.toJson()).toList(),
     };
 
 VisualNovelTitle _$VisualNovelTitleFromJson(Map<String, dynamic> json) =>
@@ -74,6 +64,7 @@ VisualNovelTitle _$VisualNovelTitleFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       latin: json['latin'] as String?,
       official: json['official'] as bool,
+      main: json['main'] as bool,
     );
 
 Map<String, dynamic> _$VisualNovelTitleToJson(VisualNovelTitle instance) =>
@@ -82,6 +73,7 @@ Map<String, dynamic> _$VisualNovelTitleToJson(VisualNovelTitle instance) =>
       'title': instance.title,
       'latin': instance.latin,
       'official': instance.official,
+      'main': instance.main,
     };
 
 VisualNovelRelation _$VisualNovelRelationFromJson(Map<String, dynamic> json) =>
@@ -121,4 +113,22 @@ Map<String, dynamic> _$VisualNovelStaffToJson(VisualNovelStaff instance) =>
       'original': instance.original,
       'role': instance.role,
       'note': instance.note,
+    };
+
+VisualNovelImage _$VisualNovelImageFromJson(Map<String, dynamic> json) =>
+    VisualNovelImage(
+      id: json['id'] as String?,
+      url: json['url'] as String?,
+      sexual: (json['sexual'] as num?)?.toDouble(),
+      violence: (json['violence'] as num?)?.toDouble(),
+      votecount: json['votecount'] as int?,
+    );
+
+Map<String, dynamic> _$VisualNovelImageToJson(VisualNovelImage instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'url': instance.url,
+      'sexual': instance.sexual,
+      'violence': instance.violence,
+      'votecount': instance.votecount,
     };

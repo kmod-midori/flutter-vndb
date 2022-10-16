@@ -1,6 +1,5 @@
-import 'dart:convert';
-
-import 'package:flt_vndb/src/api/api.dart';
+import 'package:flt_vndb/src/api/filter.dart';
+import 'package:flt_vndb/src/api/http_api.dart';
 import 'package:flt_vndb/src/api/vn.dart';
 import 'package:flt_vndb/src/data/languages.dart';
 import 'package:flt_vndb/src/data/platforms.dart';
@@ -60,18 +59,39 @@ class ReleasesPage extends HookWidget {
       child: Text("Platforms: $platformLabel"),
     );
 
-    var filter = "(vn = ${vn.id} ";
-    if (filterLanguages.value.length == 1) {
-      filter += "and languages = ${json.encode(filterLanguages.value.first)} ";
-    } else if (filterLanguages.value.length > 1) {
-      filter += "and languages = ${json.encode(filterLanguages.value)} ";
+    var filters = <Filter>[
+      NestedFilter(
+        "vn",
+        FilterOperator.eq,
+        StringFilter("id", FilterOperator.eq, vn.id),
+      ),
+    ];
+
+    if (filterLanguages.value.isNotEmpty) {
+      filters.add(
+        CompositeFilter(
+          type: CompositeType.or,
+          children: filterLanguages.value
+              .map(
+                (l) => StringFilter("lang", FilterOperator.eq, l),
+              )
+              .toList(),
+        ),
+      );
     }
-    if (filterPlatforms.value.length == 1) {
-      filter += "and platforms = ${json.encode(filterPlatforms.value.first)} ";
-    } else if (filterPlatforms.value.length > 1) {
-      filter += "and platforms = ${json.encode(filterPlatforms.value)} ";
+
+    if (filterPlatforms.value.isNotEmpty) {
+      filters.add(
+        CompositeFilter(
+          type: CompositeType.or,
+          children: filterPlatforms.value
+              .map(
+                (p) => StringFilter("platform", FilterOperator.eq, p),
+              )
+              .toList(),
+        ),
+      );
     }
-    filter += ")";
 
     return Column(
       children: [
@@ -90,9 +110,14 @@ class ReleasesPage extends HookWidget {
         ),
         Expanded(
           child: ReleaseList(
-            filter: filter,
-            sort: ReleaseSort.released,
-            key: ValueKey(filter),
+            query: ApiQuery(
+              filters: CompositeFilter(
+                type: CompositeType.and,
+                children: filters,
+              ).toFilterJson(),
+              fields: [],
+            ),
+            key: ValueKey(filters),
           ),
         )
       ],

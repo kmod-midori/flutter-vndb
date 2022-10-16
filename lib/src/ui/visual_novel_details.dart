@@ -1,4 +1,4 @@
-import 'package:flt_vndb/src/api/api.dart';
+import 'package:flt_vndb/src/api/http_api.dart';
 import 'package:flt_vndb/src/api/vn.dart';
 import 'package:flt_vndb/src/ui/detail_pages/info.dart';
 import 'package:flt_vndb/src/ui/detail_pages/releases.dart';
@@ -8,15 +8,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 /// Displays detailed information about a SampleItem.
 class VisualNovelDetailsView extends HookWidget {
-  final VisualNovel vn;
+  final String id;
 
-  const VisualNovelDetailsView(this.vn, {super.key});
+  const VisualNovelDetailsView(this.id, {super.key});
 
   factory VisualNovelDetailsView.fromRouteSettings(RouteSettings settings) {
-    final vn = VisualNovel.fromJson(
-      (settings.arguments as Map<String, dynamic>)["vn"],
-    );
-    return VisualNovelDetailsView(vn, key: ValueKey(vn.id));
+    final id = (settings.arguments as Map<String, dynamic>)["id"];
+    return VisualNovelDetailsView(id, key: ValueKey(id));
   }
 
   static const routeName = '/vn';
@@ -25,41 +23,57 @@ class VisualNovelDetailsView extends HookWidget {
   Widget build(BuildContext context) {
     // final l10n = AppLocalizations.of(context)!;
 
-    final tabController = useTabController(initialLength: 4);
+    final tabController = useTabController(initialLength: 2);
 
     final vnDetailSnapshot = useFuture(
       useMemoized(
-        () => vndbApi.getVn(
-          [VnFlag.relations, VnFlag.tags, VnFlag.staff],
-          "(id = ${vn.id})",
-        ).then((res) => res.items[0]),
-        [vn.id],
+        () => vndbHttpApi.querySingleVisualNovel(id, [
+          "title",
+          "alttitle",
+          "released",
+          "titles{lang,title,latin,official,main}",
+          "image.url",
+          "aliases",
+          "description",
+          "length",
+          "length_minutes",
+          "length_votes"
+        ]),
+        [id],
       ),
       preserveState: false,
     );
 
-    final vnDetail = vnDetailSnapshot.data;
+    final vn = vnDetailSnapshot.data;
+
+    if (vn == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     final tabBar = TabBar(
       controller: tabController,
       indicatorColor: Colors.white,
       tabs: <Widget>[
         const Tab(icon: Icon(Icons.info)), // Info
-        const Tab(icon: Icon(Icons.tag)), // Tags
+        // const Tab(icon: Icon(Icons.tag)), // Tags
         const Tab(icon: Icon(Icons.discount)), // Releases
-        const Tab(icon: Icon(Icons.person)) // Staff
+        // const Tab(icon: Icon(Icons.person)) // Staff
       ],
     );
 
     final tabBarView = TabBarView(
       controller: tabController,
       children: <Widget>[
-        MainPage(vn, null),
-        vnDetail != null
-            ? TagsPage.fromUnsorted(vnDetail.tags!)
-            : const Center(child: CircularProgressIndicator()),
+        MainPage(vn),
+        // vnDetail != null
+        //     ? TagsPage.fromUnsorted(vnDetail.tags!)
+        //     : const Center(child: CircularProgressIndicator()),
         ReleasesPage(vn, key: ValueKey(vn.id)),
-        Center(child: Text(vnDetail?.staff?.toString() ?? "Loading...")),
+        // Center(child: Text(vnDetail?.staff?.toString() ?? "Loading...")),
       ],
     );
 

@@ -1,4 +1,4 @@
-import 'package:flt_vndb/src/api/api.dart';
+import 'package:flt_vndb/src/api/http_api.dart';
 import 'package:flt_vndb/src/api/vn.dart';
 import 'package:flt_vndb/src/ui/visual_novel_details.dart';
 import 'package:flt_vndb/src/utils/hooks.dart';
@@ -11,17 +11,17 @@ import 'visual_novel_list.dart';
 
 /// Displays a list of SampleItems.
 class VisualNovelListView extends HookWidget {
-  final String filter;
+  final ApiQuery query;
 
   const VisualNovelListView({
-    required this.filter,
+    required this.query,
     super.key,
   });
 
   factory VisualNovelListView.fromRouteSettings(RouteSettings settings) {
     final arguments = settings.arguments as Map<String, dynamic>;
     return VisualNovelListView(
-      filter: arguments["filter"],
+      query: ApiQuery.fromJson(arguments["query"]),
     );
   }
 
@@ -44,16 +44,14 @@ class VisualNovelListView extends HookWidget {
 
     final listBody = VisualNovelList(
       // filter: '(platforms = "swi")',
-      filter: filter,
-      sort: VnSort.rating,
-      reverse: true,
+      query: query,
       onItemClick: (vn) {
         if (isMobileLayout) {
           Navigator.restorablePushNamed(
             context,
             VisualNovelDetailsView.routeName,
             arguments: {
-              "vn": vn.toJson(),
+              "id": vn.id,
             },
           );
         } else {
@@ -80,7 +78,7 @@ class VisualNovelListView extends HookWidget {
       final detailView = selectedVn.value == null
           ? Scaffold(body: Center(child: Text(l10n.emptyDetailsPage)))
           : VisualNovelDetailsView(
-              selectedVn.value!,
+              selectedVn.value!.id,
               key: ValueKey(selectedVn.value!.id),
             );
 
