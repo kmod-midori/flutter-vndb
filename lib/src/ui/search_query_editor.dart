@@ -8,38 +8,43 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class SearchQueryEditor extends HookWidget {
   const SearchQueryEditor({super.key});
 
+  void _runQuery(BuildContext context, String search) {
+    final query = ApiQuery(
+      filters: StringFilter(
+        "search",
+        FilterOperator.eq,
+        search,
+      ).toFilterJson(),
+      fields: [],
+      sort: "rating",
+      reverse: true,
+    );
+
+    Navigator.restorablePushNamed(
+      context,
+      VisualNovelListView.routeName,
+      arguments: {
+        "query": query.toJson(),
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final controller = useTextEditingController();
+    final searchField = TextField(
+      decoration: const InputDecoration(
+        hintText: "Search",
+        suffixIcon: Icon(Icons.search),
+      ),
+      onSubmitted: (value) {
+        _runQuery(context, value);
+      },
+    );
 
     return Center(
       child: Column(children: [
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: "Search",
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                final query = ApiQuery(
-                  filters: StringFilter(
-                    "search",
-                    FilterOperator.eq,
-                    controller.value.text,
-                  ).toFilterJson(),
-                  fields: [],
-                );
-                Navigator.restorablePushNamed(
-                  context,
-                  VisualNovelListView.routeName,
-                  arguments: {
-                    "query": query.toJson(),
-                  },
-                );
-              },
-            ),
-          ),
-        ),
+        searchField,
+        IconButton(onPressed: () {}, icon: const Icon(Icons.sort))
       ]),
     );
   }
@@ -52,12 +57,38 @@ class SearchQueryPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tabs = <Widget>[
+      const Tab(text: "Visual Novels"),
+      // const Tab(text: "Releases"),
+      // const Tab(text: "Producers"),
+      // const Tab(text: "Staff"),
+      // const Tab(text: "Characters"),
+      // const Tab(text: "Tags"),
+      // const Tab(text: "Traits"),
+    ];
+    final tabController = useTabController(initialLength: tabs.length);
+    final tabBar = TabBar(
+      tabs: tabs,
+      controller: tabController,
+      isScrollable: true,
+    );
+    final tabBarView = TabBarView(
+      controller: tabController,
+      children: <Widget>[
+        // MainPage(vn, key: ValueKey("${id}_main")),
+        // TagsPage(id, key: ValueKey("${id}_tags")),
+        // ReleasesPage(id, key: ValueKey("${id}_releases")),
+        // Center(child: Text(vnDetail?.staff?.toString() ?? "Loading...")),
+      ],
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Search Query"),
         actions: [
           const SettingsIconButton(),
         ],
+        bottom: tabBar,
       ),
       body: SearchQueryEditor(),
     );

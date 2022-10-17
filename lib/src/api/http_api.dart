@@ -132,15 +132,18 @@ class VndbHttpApi {
             receiveTimeout: 5000,
           ),
         ) {
-    final adapter = _dio.httpClientAdapter as DefaultHttpClientAdapter;
-    adapter.onHttpClientCreate = (HttpClient client) {
-      client.findProxy = (uri) {
-        //proxy all request to localhost:8888
-        return 'PROXY 127.0.0.1:10809';
-      };
+    if (_dio.httpClientAdapter is DefaultHttpClientAdapter) {
+      final adapter = _dio.httpClientAdapter as DefaultHttpClientAdapter;
 
-      return client;
-    };
+      adapter.onHttpClientCreate = (HttpClient client) {
+        client.findProxy = (uri) {
+          //proxy all request to localhost:8888
+          return 'PROXY 127.0.0.1:10809';
+        };
+
+        return client;
+      };
+    }
   }
 
   Future<ApiResponse<T>> _query<T>(

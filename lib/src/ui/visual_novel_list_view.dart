@@ -79,6 +79,7 @@ class VisualNovelListView extends HookWidget {
           ? Scaffold(body: Center(child: Text(l10n.emptyDetailsPage)))
           : VisualNovelDetailsView(
               selectedVn.value!.id,
+              showBackButton: false,
               key: ValueKey(selectedVn.value!.id),
             );
 

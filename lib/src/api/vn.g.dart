@@ -34,6 +34,9 @@ VisualNovel _$VisualNovelFromJson(Map<String, dynamic> json) => VisualNovel(
       popularity: (json['popularity'] as num?)?.toDouble(),
       rating: (json['rating'] as num?)?.toDouble(),
       votecount: json['votecount'] as int?,
+      tags: (json['tags'] as List<dynamic>?)
+          ?.map((e) => VisualNovelTag.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$VisualNovelToJson(VisualNovel instance) =>
@@ -56,6 +59,7 @@ Map<String, dynamic> _$VisualNovelToJson(VisualNovel instance) =>
       'popularity': instance.popularity,
       'rating': instance.rating,
       'votecount': instance.votecount,
+      'tags': instance.tags?.map((e) => e.toJson()).toList(),
     };
 
 VisualNovelTitle _$VisualNovelTitleFromJson(Map<String, dynamic> json) =>
@@ -131,4 +135,24 @@ Map<String, dynamic> _$VisualNovelImageToJson(VisualNovelImage instance) =>
       'sexual': instance.sexual,
       'violence': instance.violence,
       'votecount': instance.votecount,
+    };
+
+VisualNovelTag _$VisualNovelTagFromJson(Map<String, dynamic> json) =>
+    VisualNovelTag(
+      id: json['id'] as String,
+      rating: (json['rating'] as num).toDouble(),
+      spoiler: json['spoiler'] as int,
+      lie: json['lie'] as bool,
+      name: json['name'] as String,
+      category: json['category'] as String,
+    );
+
+Map<String, dynamic> _$VisualNovelTagToJson(VisualNovelTag instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'rating': instance.rating,
+      'spoiler': instance.spoiler,
+      'lie': instance.lie,
+      'name': instance.name,
+      'category': instance.category,
     };

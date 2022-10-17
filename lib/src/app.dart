@@ -69,13 +69,20 @@ class MyApp extends StatelessWidget {
                   case SettingsView.routeName:
                     return const SettingsView();
                   case VisualNovelListView.routeName:
+                    if (routeSettings.arguments == null) {
+                      continue fallback;
+                    }
                     return VisualNovelListView.fromRouteSettings(
                       routeSettings,
                     );
                   case VisualNovelDetailsView.routeName:
+                    if (routeSettings.arguments == null) {
+                      continue fallback;
+                    }
                     return VisualNovelDetailsView.fromRouteSettings(
                       routeSettings,
                     );
+                  fallback:
                   case SearchQueryPage.routeName:
                   default:
                     return const SearchQueryPage();

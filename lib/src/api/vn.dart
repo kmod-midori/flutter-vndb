@@ -133,6 +133,8 @@ class VisualNovel {
   // // === staff ===
   // final List<VisualNovelStaff>? staff;
 
+  final List<VisualNovelTag>? tags;
+
   VisualNovel({
     required this.id,
     this.title,
@@ -152,6 +154,7 @@ class VisualNovel {
     this.popularity,
     this.rating,
     this.votecount,
+    this.tags,
   });
 
   factory VisualNovel.fromJson(Map<String, dynamic> json) =>
@@ -296,4 +299,34 @@ class VisualNovelImage {
       _$VisualNovelImageFromJson(json);
 
   Map<String, dynamic> toJson() => _$VisualNovelImageToJson(this);
+}
+
+/// `tags{id,rating,spoiler,lie,name,category}`
+@JsonSerializable()
+class VisualNovelTag {
+  final String id;
+
+  final double rating;
+
+  final int spoiler;
+
+  final bool lie;
+
+  final String name;
+
+  final String category;
+
+  VisualNovelTag({
+    required this.id,
+    required this.rating,
+    required this.spoiler,
+    required this.lie,
+    required this.name,
+    required this.category,
+  });
+
+  factory VisualNovelTag.fromJson(Map<String, dynamic> json) =>
+      _$VisualNovelTagFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VisualNovelTagToJson(this);
 }

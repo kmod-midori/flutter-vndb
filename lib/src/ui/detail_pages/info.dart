@@ -1,45 +1,45 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flt_vndb/src/api/vn.dart';
 import 'package:flt_vndb/src/ui/visual_novel_item.dart';
+import 'package:flt_vndb/src/utils/bb_code_text.dart';
 import 'package:flt_vndb/src/utils/hooks.dart';
 import 'package:flt_vndb/src/widgets/language_row.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bbcode/flutter_bbcode.dart';
-import 'package:flutter_bbcode/tags/basic_tags.dart';
-import 'package:flutter_bbcode/tags/tag_parser.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class MainPage extends HookWidget {
-  final VisualNovel vn;
+  final VisualNovel? vn;
 
   const MainPage(this.vn, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    useAutomaticKeepAlive(wantKeepAlive: true);
+
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isMobileLayout = useIsMobileLayout();
+
+    if (this.vn == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    final vn = this.vn!;
 
     final title = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: <Widget>[
-            SelectableText(
+            Expanded(
+                child: SelectableText(
               vn.getLocalizedTitle(context),
               style: Theme.of(context).textTheme.titleLarge,
-            ),
+              // maxLines: 3,
+            )),
             const SizedBox(width: 16.0),
-            IconButton(
-              icon: const Icon(Icons.open_in_browser),
-              onPressed: () {
-                launchUrlString("https://vndb.org/${vn.id}");
-              },
-            ),
             if (vn.titles != null)
               IconButton(
                 icon: const Icon(Icons.translate),
@@ -99,16 +99,16 @@ class MainPage extends HookWidget {
                 title: Text(l10n.releaseDate),
                 trailing: Text(vn.released!),
               ),
-            // if (vn.popularity != null)
-            //   ListTile(
-            //     title: Text(l10n.popularity),
-            //     trailing: Text(vn.popularity.toString()),
-            //   ),
-            // if (vn.rating != null)
-            //   ListTile(
-            //     title: Text(l10n.rating),
-            //     trailing: Text(vn.rating.toString()),
-            //   ),
+            if (vn.popularity != null)
+              ListTile(
+                title: Text(l10n.popularity),
+                trailing: Text(vn.popularity.toString()),
+              ),
+            if (vn.rating != null)
+              ListTile(
+                title: Text(l10n.rating),
+                trailing: Text(vn.rating.toString()),
+              ),
             if (lengthDescription != null)
               ListTile(
                 title: Text(l10n.length),
@@ -169,21 +169,10 @@ class MainPage extends HookWidget {
 
     if (vn.description != null) {
       children.add(
-        BBCodeText(
+        UrlBBCodeText(
           data: vn.description!,
           selectable: true,
           defaultStyle: theme.textTheme.bodySmall,
-          tagsParsers: <AbstractTag>{
-            BoldTag(),
-            StrikeThroughTag(),
-            ItalicTag(),
-            UrlTag(onTap: (url) {
-              launchUrl(Uri.parse(url));
-            }),
-            ColorTag(),
-            UnderlineTag(),
-            QuoteTag(),
-          },
         ),
       );
     }

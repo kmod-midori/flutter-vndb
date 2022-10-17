@@ -1,32 +1,35 @@
-import 'package:flt_vndb/src/data/tags.dart';
+import 'package:flt_vndb/src/api/http_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:tuple/tuple.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TagsPage extends HookWidget {
-  final List<Tuple2<VndbTag, List<double>>> tags;
+  final String vnId;
 
-  const TagsPage(this.tags, {super.key});
-
-  factory TagsPage.fromUnsorted(List<List<double>> tags) {
-    final cp = List<List<double>>.from(tags);
-    cp.sort((a, b) => (b[1]).compareTo(a[1]));
-
-    final outTags = <Tuple2<VndbTag, List<double>>>[];
-    for (final tag in cp) {
-      final tagInfo = vndbTags[tag[0].toInt()];
-      if (tagInfo != null) {
-        outTags.add(Tuple2(tagInfo, tag));
-      }
-    }
-
-    return TagsPage(outTags);
-  }
+  const TagsPage(this.vnId, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    useAutomaticKeepAlive(wantKeepAlive: true);
+
     final l10n = AppLocalizations.of(context)!;
+
+    final vnSnapshot = useFuture(
+      useMemoized(
+        () => vndbHttpApi.querySingleVisualNovel(vnId, [
+          "tags{id,rating,spoiler,lie,name,category}",
+        ]),
+        [vnId],
+      ),
+    );
+
+    final tags = vnSnapshot.data?.tags;
+
+    if (tags == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     final spoilerLevelToText = <int, String>{
       0: l10n.spoilerLevelNone,
@@ -67,7 +70,8 @@ class TagsPage extends HookWidget {
         ));
 
     final shownTags =
-        tags.where((tag) => tag.item2[2] <= spoilerLevel.value).toList();
+        tags.where((tag) => tag.spoiler <= spoilerLevel.value).toList();
+    shownTags.sort((a, b) => b.rating.compareTo(a.rating));
 
     final gridView = SliverGrid(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -77,14 +81,17 @@ class TagsPage extends HookWidget {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           final tag = shownTags[index];
-          final spoilerLevelText = spoilerLevelToText[tag.item2[2].toInt()]!;
+          final spoilerLevelText = spoilerLevelToText[tag.spoiler]!;
           final body = ListTile(
-              title: Text(
-                tag.item1.name,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-              subtitle: Text("${tag.item2[1]}/$spoilerLevelText"));
+            title: Text(
+              tag.name,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: Text(
+              "${tag.rating.toStringAsFixed(1)}/$spoilerLevelText",
+            ),
+          );
 
           return Card(
               child: Column(
@@ -98,11 +105,11 @@ class TagsPage extends HookWidget {
                     icon: const Icon(Icons.info),
                     onPressed: () {},
                   ),
-                  if (tag.item1.searchable)
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {},
-                    )
+                  // if (tag.item1.searchable)
+                  //   IconButton(
+                  //     icon: const Icon(Icons.search),
+                  //     onPressed: () {},
+                  //   )
                 ],
               )
             ],

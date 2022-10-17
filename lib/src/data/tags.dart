@@ -10,8 +10,7 @@ final vndbTags = <int, VndbTag>{};
 
 Future<void> loadTags() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final jsonText =
-      await rootBundle.loadString('assets/data/vndb-tags-2022-10-02.json');
+  final jsonText = await rootBundle.loadString('assets/data/vndb-tags.json');
 
   final tags = (json.decode(jsonText) as List)
       .map((e) => VndbTag.fromJson(e as Map<String, dynamic>));
