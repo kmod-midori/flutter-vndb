@@ -104,10 +104,10 @@ class MainPage extends HookWidget {
                 title: Text(l10n.popularity),
                 trailing: Text(vn.popularity.toString()),
               ),
-            if (vn.rating != null)
+            if (vn.rating != null && vn.votecount != null)
               ListTile(
                 title: Text(l10n.rating),
-                trailing: Text(vn.rating.toString()),
+                trailing: Text("${vn.rating} (${vn.votecount})"),
               ),
             if (lengthDescription != null)
               ListTile(

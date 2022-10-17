@@ -45,7 +45,10 @@ class VisualNovelDetailsView extends HookWidget {
           "description",
           "length",
           "length_minutes",
-          "length_votes"
+          "length_votes",
+          "popularity",
+          "rating",
+          "votecount",
         ]),
         [id],
       ),
