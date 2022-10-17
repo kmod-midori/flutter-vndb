@@ -43,7 +43,10 @@ class SearchQueryEditor extends HookWidget {
 
     return Center(
       child: Column(children: [
-        searchField,
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: searchField,
+        ),
       ]),
     );
   }

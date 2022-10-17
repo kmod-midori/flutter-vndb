@@ -19,37 +19,29 @@ class SettingsView extends StatelessWidget {
     final body = ListView(
       children: ListTile.divideTiles(context: context, tiles: <Widget>[
         // Localized Title
-        // ListTile(
-        //   title: Text(l10n.localizedTitle),
-        //   subtitle: Text(l10n.localizedTitleDescription),
-        //   trailing: Switch(
-        //     value: settingsController.localizedTitle,
-        //     onChanged: settingsController.updateLocalizedTitle,
-        //   ),
-        // ),
         ListTile(
           title: Text(l10n.titleLanguage),
           subtitle: Text(l10n.titleLanguageDescription),
-          trailing: ToggleButtons(
-            onPressed: (index) {
-              settingsController.updateTitleLanguage(
-                TitleLanguage.values[index],
-              );
+          trailing: DropdownButton<TitleLanguage>(
+            value: settingsController.titleLanguage,
+            onChanged: (value) {
+              if (value != null) {
+                settingsController.updateTitleLanguage(value);
+              }
             },
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            constraints: const BoxConstraints(
-              minHeight: 30.0,
-              minWidth: 120.0,
-            ),
-            isSelected: [
-              settingsController.titleLanguage == TitleLanguage.localized,
-              settingsController.titleLanguage == TitleLanguage.romaji,
-              settingsController.titleLanguage == TitleLanguage.original,
-            ],
-            children: [
-              Text(l10n.titleLanguageLocalized),
-              Text(l10n.titleLanguageRomaji),
-              Text(l10n.titleLanguageOriginal),
+            items: [
+              DropdownMenuItem(
+                value: TitleLanguage.localized,
+                child: Text(l10n.titleLanguageLocalized),
+              ),
+              DropdownMenuItem(
+                value: TitleLanguage.romaji,
+                child: Text(l10n.titleLanguageRomaji),
+              ),
+              DropdownMenuItem(
+                value: TitleLanguage.original,
+                child: Text(l10n.titleLanguageOriginal),
+              )
             ],
           ),
         ),
@@ -80,22 +72,22 @@ class SettingsView extends StatelessWidget {
           ),
         ),
         // API Address
-        ListTile(
-          title: Text(l10n.apiAddress),
-          subtitle: Text(l10n.apiAddressDescription),
-          onTap: () async {
-            final newApiConfig = await showDialog<ApiConfig>(
-              context: context,
-              builder: (context) => ApiSettingsDialog(
-                initialValue: settingsController.apiConfig,
-              ),
-            );
+        // ListTile(
+        //   title: Text(l10n.apiAddress),
+        //   subtitle: Text(l10n.apiAddressDescription),
+        //   onTap: () async {
+        //     final newApiConfig = await showDialog<ApiConfig>(
+        //       context: context,
+        //       builder: (context) => ApiSettingsDialog(
+        //         initialValue: settingsController.apiConfig,
+        //       ),
+        //     );
 
-            if (newApiConfig != null) {
-              settingsController.updateApiConfig(newApiConfig);
-            }
-          },
-        ),
+        //     if (newApiConfig != null) {
+        //       settingsController.updateApiConfig(newApiConfig);
+        //     }
+        //   },
+        // ),
         // Language Override
         ListTile(
           title: Text(l10n.language),
