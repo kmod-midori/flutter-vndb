@@ -44,7 +44,6 @@ class SearchQueryEditor extends HookWidget {
     return Center(
       child: Column(children: [
         searchField,
-        IconButton(onPressed: () {}, icon: const Icon(Icons.sort))
       ]),
     );
   }

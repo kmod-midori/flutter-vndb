@@ -35,9 +35,13 @@ class VisualNovelList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return ItemList<VisualNovel>(
-      pageFetcher: (pageKey) async {
+      pageFetcher: (pageKey, sortSetting) async {
         final items = await vndbHttpApi.queryVisualNovels(
-          query.copyWith(page: pageKey),
+          query.copyWith(
+            page: pageKey,
+            sort: sortSetting?.field,
+            reverse: sortSetting?.reverse,
+          ),
         );
         return ItemListPage(items.results, items.more);
       },
@@ -51,6 +55,34 @@ class VisualNovelList extends HookWidget {
         selected: selectedId == item.id,
         key: ValueKey(item.id),
       ),
+      initialSortSetting: const SortSetting("popularity", true),
+      sortOptions: [
+        SortOption(
+          "Title",
+          "title",
+          SortOptionType.text,
+        ),
+        SortOption(
+          "Release Date",
+          "released",
+          SortOptionType.number,
+        ),
+        SortOption(
+          "Popularity",
+          "popularity",
+          SortOptionType.number,
+        ),
+        SortOption(
+          "Rating",
+          "rating",
+          SortOptionType.number,
+        ),
+        SortOption(
+          "Vote Count",
+          "votecount",
+          SortOptionType.number,
+        ),
+      ],
     );
   }
 }

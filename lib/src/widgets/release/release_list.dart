@@ -35,9 +35,13 @@ class ReleaseList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return ItemList<Release>(
-      pageFetcher: (pageKey) async {
+      pageFetcher: (pageKey, sortSetting) async {
         final items = await vndbHttpApi.queryReleases(
-          query.copyWith(page: pageKey),
+          query.copyWith(
+            page: pageKey,
+            sort: sortSetting?.field,
+            reverse: sortSetting?.reverse,
+          ),
         );
         return ItemListPage(items.results, items.more);
       },
@@ -45,6 +49,19 @@ class ReleaseList extends HookWidget {
         item,
         key: ValueKey(item.id),
       ),
+      initialSortSetting: const SortSetting("released", true),
+      sortOptions: [
+        SortOption(
+          "Title",
+          "title",
+          SortOptionType.text,
+        ),
+        SortOption(
+          "Release Date",
+          "released",
+          SortOptionType.number,
+        ),
+      ],
       separated: true,
     );
   }
