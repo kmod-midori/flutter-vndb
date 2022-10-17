@@ -12,7 +12,7 @@ jobs:
     steps:
     
     # Setup Java environment in order to build the Android app.
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - uses: actions/setup-java@v2
       with:
         distribution: 'zulu'
@@ -21,8 +21,11 @@ jobs:
       with:
         channel: 'stable'
         cache: true
+
     - run: sed -i 's|pub.flutter-io.cn|pub.dartlang.org|g' pubspec.lock
     - run: flutter pub get
+    - run: git restore pubspec.lock
+
     - run: flutter build apk --release --target-platform android-arm64
     - uses: actions/upload-artifact@v1
       with:

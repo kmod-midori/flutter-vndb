@@ -11,13 +11,16 @@ jobs:
       contents: read
       deployments: write
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
+
       - run: sed -i 's|pub.flutter-io.cn|pub.dartlang.org|g' pubspec.lock
       - run: flutter pub get
+      - run: git restore pubspec.lock
+
       - run: flutter build -v web --release --web-renderer html
       - name: Publish
         uses: cloudflare/pages-action@1
