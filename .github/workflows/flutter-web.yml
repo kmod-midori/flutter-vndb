@@ -1,0 +1,32 @@
+name: Flutter Web Release CI
+
+# This workflow is triggered on pushes to the repository.
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      - run: sed -i 's|pub.flutter-io.cn|pub.dartlang.org|g' pubspec.lock
+      - run: flutter pub get
+      - run: flutter build -v web --release --web-renderer html
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: flutter-vndb
+          directory: build/web
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
