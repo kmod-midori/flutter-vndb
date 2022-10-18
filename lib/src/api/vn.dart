@@ -1,69 +1,82 @@
-import 'package:flutter/cupertino.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flt_vndb/src/settings/settings_controller.dart';
 import 'package:flt_vndb/src/settings/settings_service.dart';
 
 part 'vn.g.dart';
+part 'vn.freezed.dart';
 
-@immutable
-@JsonSerializable(explicitToJson: true)
-class VisualNovel {
-  /// vndbid.
-  final String id;
+@freezed
+class VisualNovel with _$VisualNovel {
+  const factory VisualNovel({
+    /// vndbid.
+    required String id,
 
-  /// Main title as displayed on the site, typically romanized from the original script.
-  final String? title;
+    /// Main title as displayed on the site, typically romanized from the original script.
+    String? title,
 
-  /// Alternative title, typically the same as title but in the original script.
-  final String? alttitle;
+    /// Main title as displayed on the site, typically romanized from the original script.
+    String? alttitle,
 
-  /// Full list of titles associated with the VN, always contains at least one title.
-  final List<VisualNovelTitle>? titles;
+    /// Full list of titles associated with the VN, always contains at least one title.
+    List<VisualNovelTitle>? titles,
 
-  /// list of aliases
-  final List<String>? aliases;
+    /// list of aliases
+    List<String>? aliases,
 
-  /// language the VN has originally been written in.
-  final String? olang;
+    /// language the VN has originally been written in.
+    String? olang,
 
-  /// development status. 0 meaning ‘Finished’, 1 is ‘In development’ and 2 for ‘Cancelled’.
-  final int? devstatus;
+    /// development status. 0 meaning ‘Finished’, 1 is ‘In development’ and 2 for ‘Cancelled’.
+    int? devstatus,
 
-  /// Date of the first release.
-  final String? released;
+    /// Date of the first release.
+    String? released,
 
-  /// list of languages this VN is available in. Does not include machine translations.
-  final List<String>? languages;
+    /// list of languages this VN is available in. Does not include machine translations.
+    List<String>? languages,
 
-  /// list of platforms for which this VN is available.
-  final List<String>? platforms;
+    /// list of platforms for which this VN is available.
+    List<String>? platforms,
+    VisualNovelImage? image,
 
-  final VisualNovelImage? image;
+    /// Length of the game, 1-5.
+    /// This field is only used as a fallback for when there are no length votes,
+    /// so you’ll probably want to fetch length_minutes too.
+    int? length,
+
+    /// Average play time from length votes
+    @JsonKey(name: 'length_minutes') int? lengthMinutes,
+
+    /// Number of length votes
+    @JsonKey(name: 'length_votes') int? lengthVotes,
+
+    /// Description of the VN. Can include formatting codes as described in d9#3.
+    String? description,
+
+    /// Between 0 (unpopular) and 100 (most popular).
+    double? popularity,
+
+    /// Bayesian rating, between 1 and 10, null if nobody voted.
+    double? rating,
+
+    /// Number of votes.
+    int? votecount,
+
+    /// Tags associated with the VN.
+    List<VisualNovelTag>? tags,
+  }) = _VisualNovel;
+
+  const VisualNovel._();
 
   String? get imageUrl => image?.url;
-
-  /// Length of the game, 1-5.
-  /// This field is only used as a fallback for when there are no length votes,
-  /// so you’ll probably want to fetch length_minutes too.
-  final int? length;
-
-  /// Average play time from length votes
-  @JsonKey(name: 'length_minutes')
-  final int? lengthMinutes;
 
   String? get lengthText => lengthMinutes != null
       ? lengthMinutes! < 60
           ? '${lengthMinutes!.toString().padLeft(2, '0')}m'
           : '${(lengthMinutes! / 60).floor().toString().padLeft(2, '0')}h${(lengthMinutes! % 60).toString().padLeft(2, '0')}m'
       : null;
-
-  /// Number of length votes
-  @JsonKey(name: 'length_votes')
-  final int? lengthVotes;
-
-  /// Description of the VN. Can include formatting codes as described in d9#3.
-  final String? description;
 
   String getLocalizedTitle(BuildContext context) {
     assert(this.title != null);
@@ -113,91 +126,38 @@ class VisualNovel {
     return title;
   }
 
-  // // === relations ===
-  // final List<VisualNovelRelation>? relations;
+  // // // === relations ===
+  // // final List<VisualNovelRelation>? relations;
 
-  // // === tags ===
-  // final List<List<double>>? tags;
-
-  // // === stats ===
-
-  /// Between 0 (unpopular) and 100 (most popular).
-  final double? popularity;
-
-  /// Bayesian rating, between 1 and 10, null if nobody voted.
-  final double? rating;
-
-  /// Number of votes.
-  final int? votecount;
-
-  // // === staff ===
-  // final List<VisualNovelStaff>? staff;
-
-  final List<VisualNovelTag>? tags;
-
-  VisualNovel({
-    required this.id,
-    this.title,
-    this.alttitle,
-    this.titles,
-    this.aliases,
-    this.olang,
-    this.devstatus,
-    this.released,
-    this.languages,
-    this.platforms,
-    this.image,
-    this.length,
-    this.lengthMinutes,
-    this.lengthVotes,
-    this.description,
-    this.popularity,
-    this.rating,
-    this.votecount,
-    this.tags,
-  });
+  // // // === staff ===
+  // // final List<VisualNovelStaff>? staff;
 
   factory VisualNovel.fromJson(Map<String, dynamic> json) =>
       _$VisualNovelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$VisualNovelToJson(this);
 }
 
 /// You must use `titles{lang,title,official,main}` if you are using this class.
-@JsonSerializable()
-class VisualNovelTitle {
-  /// language of this title. Each language appears at most once in the titles list.
-  final String lang;
+@freezed
+class VisualNovelTitle with _$VisualNovelTitle {
+  const factory VisualNovelTitle({
+    /// language of this title. Each language appears at most once in the titles list.
+    required String lang,
 
-  /// title in the original script
-  final String title;
+    /// title in the original script
+    required String title,
 
-  /// romanized version of "title"
-  final String? latin;
+    /// romanized version of "title"
+    String? latin,
 
-  /// whether this is an official title
-  final bool official;
+    /// whether this is an official title
+    required bool official,
 
-  /// whether this is the “main” title for the visual novel entry
-  final bool main;
-
-  VisualNovelTitle({
-    required this.lang,
-    required this.title,
-    this.latin,
-    required this.official,
-    required this.main,
-  });
+    /// whether this is the “main” title for the visual novel entry
+    required bool main,
+  }) = _VisualNovelTitle;
 
   factory VisualNovelTitle.fromJson(Map<String, dynamic> json) =>
       _$VisualNovelTitleFromJson(json);
-
-  Map<String, dynamic> toJson() => _$VisualNovelTitleToJson(this);
-
-  @override
-  String toString() {
-    return 'VisualNovelTitle(lang: $lang, title: $title, latin: $latin, official: $official)';
-  }
 }
 
 @JsonSerializable()
@@ -272,61 +232,38 @@ class VisualNovelStaff {
   }
 }
 
-@JsonSerializable()
-class VisualNovelImage {
-  final String? id;
+@freezed
+class VisualNovelImage with _$VisualNovelImage {
+  const factory VisualNovelImage({
+    String? id,
+    String? url,
 
-  final String? url;
+    /// Number between 0 and 2 (inclusive), average image flagging vote for sexual content.
+    double? sexual,
 
-  /// Number between 0 and 2 (inclusive), average image flagging vote for sexual content.
-  final double? sexual;
+    /// Number between 0 and 2 (inclusive), average image flagging vote for violence.
+    double? violence,
 
-  /// Number between 0 and 2 (inclusive), average image flagging vote for violence.
-  final double? violence;
-
-  /// number of image flagging votes.
-  final int? votecount;
-
-  VisualNovelImage({
-    this.id,
-    this.url,
-    this.sexual,
-    this.violence,
-    this.votecount,
-  });
+    /// number of image flagging votes.
+    int? votecount,
+  }) = _VisualNovelImage;
 
   factory VisualNovelImage.fromJson(Map<String, dynamic> json) =>
       _$VisualNovelImageFromJson(json);
-
-  Map<String, dynamic> toJson() => _$VisualNovelImageToJson(this);
 }
 
 /// `tags{id,rating,spoiler,lie,name,category}`
-@JsonSerializable()
-class VisualNovelTag {
-  final String id;
-
-  final double rating;
-
-  final int spoiler;
-
-  final bool lie;
-
-  final String name;
-
-  final String category;
-
-  VisualNovelTag({
-    required this.id,
-    required this.rating,
-    required this.spoiler,
-    required this.lie,
-    required this.name,
-    required this.category,
-  });
+@freezed
+class VisualNovelTag with _$VisualNovelTag {
+  const factory VisualNovelTag({
+    required String id,
+    required double rating,
+    required int spoiler,
+    required bool lie,
+    required String name,
+    required String category,
+  }) = _VisualNovelTag;
 
   factory VisualNovelTag.fromJson(Map<String, dynamic> json) =>
       _$VisualNovelTagFromJson(json);
-
-  Map<String, dynamic> toJson() => _$VisualNovelTagToJson(this);
 }

@@ -11,10 +11,10 @@ class SearchQueryEditor extends HookWidget {
   void _runQuery(BuildContext context, String search) {
     final query = ApiQuery(
       filters: StringFilter(
-        "search",
-        FilterOperator.eq,
-        search,
-      ).toFilterJson(),
+        key: "search",
+        op: FilterOperator.eq,
+        value: search,
+      ),
       fields: [],
       sort: "rating",
       reverse: true,

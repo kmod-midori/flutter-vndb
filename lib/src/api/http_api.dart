@@ -4,81 +4,53 @@ import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
 import 'package:flt_vndb/src/api/filter.dart';
 import 'package:flt_vndb/src/api/release.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flt_vndb/src/api/vn.dart';
 import 'package:logging/logging.dart';
 
 part 'http_api.g.dart';
+part 'http_api.freezed.dart';
 
-@JsonSerializable()
-class ApiQuery {
-  final List<dynamic> filters;
+List<dynamic> _filtersToJson(Filter filter) => filter.toFilterJson();
+Filter _filtersFromJson(List<dynamic> val) => parseFilter(val);
 
-  final List<String> fields;
+@freezed
+class ApiQuery with _$ApiQuery {
+  const factory ApiQuery({
+    /// Filter to apply to the query.
+    @JsonKey(fromJson: _filtersFromJson, toJson: _filtersToJson)
+        required Filter filters,
 
-  final String? sort;
+    /// Fields to return.
+    required List<String> fields,
 
-  /// Set to true to sort in descending order.
-  final bool reverse;
+    /// Which field to sort by.
+    String? sort,
 
-  /// Number of results per page, max 100.
-  final int results;
+    /// Set to true to sort in descending order.
+    @Default(false) bool reverse,
 
-  /// Page number to request, starting from 1.
-  final int page;
+    /// Number of results per page, max 100.
+    @Default(20) int results,
 
-  /// Whether the response should include the count field (see below).
-  /// This option should be avoided when the count is not needed since it has a
-  /// considerable performance impact.
-  final bool count;
+    /// Page number to request, starting from 1.
+    @Default(1) int page,
 
-  @JsonKey(name: "compact_filters")
-  final bool compactFilters;
+    /// Whether the response should include the count field (see below).
+    /// This option should be avoided when the count is not needed since it has a
+    /// considerable performance impact.
+    @Default(false) bool count,
 
-  @JsonKey(name: "normalized_filters")
-  final bool normalizedFilters;
+    /// Return compact filter representation.
+    @JsonKey(name: "compact_filters") @Default(false) bool compactFilters,
 
-  ApiQuery({
-    required this.filters,
-    required this.fields,
-    this.sort,
-    this.reverse = false,
-    this.results = 25,
-    this.page = 1,
-    this.count = false,
-    this.compactFilters = false,
-    this.normalizedFilters = false,
-  });
+    /// Return normalized filter representation.
+    @JsonKey(name: "normalized_filters") @Default(false) bool normalizedFilters,
+  }) = _ApiQuery;
 
   factory ApiQuery.fromJson(Map<String, dynamic> json) =>
       _$ApiQueryFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ApiQueryToJson(this);
-
-  ApiQuery copyWith({
-    List<dynamic>? filters,
-    List<String>? fields,
-    String? sort,
-    bool? reverse,
-    int? results,
-    int? page,
-    bool? count,
-    bool? compactFilters,
-    bool? normalizedFilters,
-  }) {
-    return ApiQuery(
-      filters: filters ?? this.filters,
-      fields: fields ?? this.fields,
-      sort: sort ?? this.sort,
-      reverse: reverse ?? this.reverse,
-      results: results ?? this.results,
-      page: page ?? this.page,
-      count: count ?? this.count,
-      compactFilters: compactFilters ?? this.compactFilters,
-      normalizedFilters: normalizedFilters ?? this.normalizedFilters,
-    );
-  }
 }
 
 @JsonSerializable(genericArgumentFactories: true)
@@ -189,7 +161,11 @@ class VndbHttpApi {
   Future<VisualNovel?> querySingleVisualNovel(
       String id, List<String> fields) async {
     final query = ApiQuery(
-      filters: StringFilter("id", FilterOperator.eq, id).toFilterJson(),
+      filters: StringFilter(
+        key: "id",
+        op: FilterOperator.eq,
+        value: id,
+      ),
       fields: fields,
     );
 

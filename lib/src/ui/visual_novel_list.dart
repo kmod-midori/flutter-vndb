@@ -40,7 +40,7 @@ class VisualNovelList extends HookWidget {
           query.copyWith(
             page: pageKey,
             sort: sortSetting?.field,
-            reverse: sortSetting?.reverse,
+            reverse: sortSetting?.reverse ?? query.reverse,
           ),
         );
         return ItemListPage(items.results, items.more);

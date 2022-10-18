@@ -60,9 +60,9 @@ class ReleasesPage extends HookWidget {
 
     var filters = <Filter>[
       NestedFilter(
-        "vn",
-        FilterOperator.eq,
-        StringFilter("id", FilterOperator.eq, vnId),
+        key: "vn",
+        op: FilterOperator.eq,
+        value: StringFilter(key: "id", op: FilterOperator.eq, value: vnId),
       ),
     ];
 
@@ -72,7 +72,11 @@ class ReleasesPage extends HookWidget {
           type: CompositeType.or,
           children: filterLanguages.value
               .map(
-                (l) => StringFilter("lang", FilterOperator.eq, l),
+                (l) => StringFilter(
+                  key: "lang",
+                  op: FilterOperator.eq,
+                  value: l,
+                ),
               )
               .toList(),
         ),
@@ -85,7 +89,11 @@ class ReleasesPage extends HookWidget {
           type: CompositeType.or,
           children: filterPlatforms.value
               .map(
-                (p) => StringFilter("platform", FilterOperator.eq, p),
+                (p) => StringFilter(
+                  key: "platform",
+                  op: FilterOperator.eq,
+                  value: p,
+                ),
               )
               .toList(),
         ),
@@ -113,7 +121,7 @@ class ReleasesPage extends HookWidget {
               filters: CompositeFilter(
                 type: CompositeType.and,
                 children: filters,
-              ).toFilterJson(),
+              ),
               fields: [],
             ),
             key: ValueKey(filters),
