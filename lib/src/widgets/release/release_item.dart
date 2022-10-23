@@ -9,7 +9,16 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 class ReleaseItem extends StatelessWidget {
   final Release release;
 
-  const ReleaseItem(this.release, {super.key});
+  final void Function()? onTap;
+
+  final bool selected;
+
+  const ReleaseItem(
+    this.release, {
+    this.onTap,
+    this.selected = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,17 +73,20 @@ class ReleaseItem extends StatelessWidget {
       // if (release.isVoiced) labelledIcon(MdiIcons.microphone, "Voiced"),
     ];
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(child: infoCol),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: icons,
-          )
-        ],
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(child: infoCol),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: icons,
+            )
+          ],
+        ),
       ),
     );
   }

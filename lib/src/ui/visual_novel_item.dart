@@ -12,9 +12,12 @@ class VisualNovelItem extends StatelessWidget {
 
   final bool selected;
 
-  const VisualNovelItem(this.item,
-      {this.onTap, this.selected = false, Key? key})
-      : super(key: key);
+  const VisualNovelItem(
+    this.item, {
+    this.onTap,
+    this.selected = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +75,7 @@ class VisualNovelItem extends StatelessWidget {
               SizedBox(
                 width: 90,
                 child: VisualNovelThumbnail(
-                  item.image!.url!,
+                  item.image!,
                 ),
               ),
             Expanded(
@@ -91,19 +94,23 @@ class VisualNovelItem extends StatelessWidget {
 }
 
 class VisualNovelThumbnail extends StatelessWidget {
-  final String url;
+  final VisualNovelImage image;
 
-  final double? width;
-
-  final double? height;
-
-  const VisualNovelThumbnail(this.url, {this.width, this.height, Key? key})
-      : super(key: key);
+  const VisualNovelThumbnail(
+    this.image, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (image.sexual != null && image.sexual! > 1.0) {
+      return const SizedBox(
+        height: 100.0,
+        child: Center(child: Icon(Icons.warning)),
+      );
+    }
     return CachedNetworkImage(
-      imageUrl: url,
+      imageUrl: image.url!,
       fit: BoxFit.contain,
       alignment: Alignment.topCenter,
       progressIndicatorBuilder: (context, url, downloadProgress) => Center(

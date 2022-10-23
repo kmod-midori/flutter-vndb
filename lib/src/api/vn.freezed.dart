@@ -39,7 +39,7 @@ mixin _$VisualNovel {
   String? get olang => throw _privateConstructorUsedError;
 
   /// development status. 0 meaning ‘Finished’, 1 is ‘In development’ and 2 for ‘Cancelled’.
-  int? get devstatus => throw _privateConstructorUsedError;
+  DevelopmentStatus? get devstatus => throw _privateConstructorUsedError;
 
   /// Date of the first release.
   String? get released => throw _privateConstructorUsedError;
@@ -98,7 +98,7 @@ abstract class $VisualNovelCopyWith<$Res> {
       List<VisualNovelTitle>? titles,
       List<String>? aliases,
       String? olang,
-      int? devstatus,
+      DevelopmentStatus? devstatus,
       String? released,
       List<String>? languages,
       List<String>? platforms,
@@ -176,7 +176,7 @@ class _$VisualNovelCopyWithImpl<$Res, $Val extends VisualNovel>
       devstatus: freezed == devstatus
           ? _value.devstatus
           : devstatus // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DevelopmentStatus?,
       released: freezed == released
           ? _value.released
           : released // ignore: cast_nullable_to_non_nullable
@@ -256,7 +256,7 @@ abstract class _$$_VisualNovelCopyWith<$Res>
       List<VisualNovelTitle>? titles,
       List<String>? aliases,
       String? olang,
-      int? devstatus,
+      DevelopmentStatus? devstatus,
       String? released,
       List<String>? languages,
       List<String>? platforms,
@@ -333,7 +333,7 @@ class __$$_VisualNovelCopyWithImpl<$Res>
       devstatus: freezed == devstatus
           ? _value.devstatus
           : devstatus // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DevelopmentStatus?,
       released: freezed == released
           ? _value.released
           : released // ignore: cast_nullable_to_non_nullable
@@ -461,7 +461,7 @@ class _$_VisualNovel extends _VisualNovel {
 
   /// development status. 0 meaning ‘Finished’, 1 is ‘In development’ and 2 for ‘Cancelled’.
   @override
-  final int? devstatus;
+  final DevelopmentStatus? devstatus;
 
   /// Date of the first release.
   @override
@@ -626,7 +626,7 @@ abstract class _VisualNovel extends VisualNovel {
       final List<VisualNovelTitle>? titles,
       final List<String>? aliases,
       final String? olang,
-      final int? devstatus,
+      final DevelopmentStatus? devstatus,
       final String? released,
       final List<String>? languages,
       final List<String>? platforms,
@@ -671,7 +671,7 @@ abstract class _VisualNovel extends VisualNovel {
   @override
 
   /// development status. 0 meaning ‘Finished’, 1 is ‘In development’ and 2 for ‘Cancelled’.
-  int? get devstatus;
+  DevelopmentStatus? get devstatus;
   @override
 
   /// Date of the first release.
@@ -988,6 +988,9 @@ mixin _$VisualNovelImage {
   /// number of image flagging votes.
   int? get votecount => throw _privateConstructorUsedError;
 
+  /// Pixel dimensions of the image, array with two integer elements indicating the width and height.
+  List<int>? get dims => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $VisualNovelImageCopyWith<VisualNovelImage> get copyWith =>
@@ -1005,7 +1008,8 @@ abstract class $VisualNovelImageCopyWith<$Res> {
       String? url,
       double? sexual,
       double? violence,
-      int? votecount});
+      int? votecount,
+      List<int>? dims});
 }
 
 /// @nodoc
@@ -1026,6 +1030,7 @@ class _$VisualNovelImageCopyWithImpl<$Res, $Val extends VisualNovelImage>
     Object? sexual = freezed,
     Object? violence = freezed,
     Object? votecount = freezed,
+    Object? dims = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -1048,6 +1053,10 @@ class _$VisualNovelImageCopyWithImpl<$Res, $Val extends VisualNovelImage>
           ? _value.votecount
           : votecount // ignore: cast_nullable_to_non_nullable
               as int?,
+      dims: freezed == dims
+          ? _value.dims
+          : dims // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
     ) as $Val);
   }
 }
@@ -1065,7 +1074,8 @@ abstract class _$$_VisualNovelImageCopyWith<$Res>
       String? url,
       double? sexual,
       double? violence,
-      int? votecount});
+      int? votecount,
+      List<int>? dims});
 }
 
 /// @nodoc
@@ -1084,6 +1094,7 @@ class __$$_VisualNovelImageCopyWithImpl<$Res>
     Object? sexual = freezed,
     Object? violence = freezed,
     Object? votecount = freezed,
+    Object? dims = freezed,
   }) {
     return _then(_$_VisualNovelImage(
       id: freezed == id
@@ -1106,15 +1117,26 @@ class __$$_VisualNovelImageCopyWithImpl<$Res>
           ? _value.votecount
           : votecount // ignore: cast_nullable_to_non_nullable
               as int?,
+      dims: freezed == dims
+          ? _value._dims
+          : dims // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_VisualNovelImage implements _VisualNovelImage {
+class _$_VisualNovelImage extends _VisualNovelImage {
   const _$_VisualNovelImage(
-      {this.id, this.url, this.sexual, this.violence, this.votecount});
+      {this.id,
+      this.url,
+      this.sexual,
+      this.violence,
+      this.votecount,
+      final List<int>? dims})
+      : _dims = dims,
+        super._();
 
   factory _$_VisualNovelImage.fromJson(Map<String, dynamic> json) =>
       _$$_VisualNovelImageFromJson(json);
@@ -1136,9 +1158,21 @@ class _$_VisualNovelImage implements _VisualNovelImage {
   @override
   final int? votecount;
 
+  /// Pixel dimensions of the image, array with two integer elements indicating the width and height.
+  final List<int>? _dims;
+
+  /// Pixel dimensions of the image, array with two integer elements indicating the width and height.
+  @override
+  List<int>? get dims {
+    final value = _dims;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   String toString() {
-    return 'VisualNovelImage(id: $id, url: $url, sexual: $sexual, violence: $violence, votecount: $votecount)';
+    return 'VisualNovelImage(id: $id, url: $url, sexual: $sexual, violence: $violence, votecount: $votecount, dims: $dims)';
   }
 
   @override
@@ -1152,13 +1186,14 @@ class _$_VisualNovelImage implements _VisualNovelImage {
             (identical(other.violence, violence) ||
                 other.violence == violence) &&
             (identical(other.votecount, votecount) ||
-                other.votecount == votecount));
+                other.votecount == votecount) &&
+            const DeepCollectionEquality().equals(other._dims, _dims));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, url, sexual, violence, votecount);
+  int get hashCode => Object.hash(runtimeType, id, url, sexual, violence,
+      votecount, const DeepCollectionEquality().hash(_dims));
 
   @JsonKey(ignore: true)
   @override
@@ -1174,13 +1209,15 @@ class _$_VisualNovelImage implements _VisualNovelImage {
   }
 }
 
-abstract class _VisualNovelImage implements VisualNovelImage {
+abstract class _VisualNovelImage extends VisualNovelImage {
   const factory _VisualNovelImage(
       {final String? id,
       final String? url,
       final double? sexual,
       final double? violence,
-      final int? votecount}) = _$_VisualNovelImage;
+      final int? votecount,
+      final List<int>? dims}) = _$_VisualNovelImage;
+  const _VisualNovelImage._() : super._();
 
   factory _VisualNovelImage.fromJson(Map<String, dynamic> json) =
       _$_VisualNovelImage.fromJson;
@@ -1202,249 +1239,11 @@ abstract class _VisualNovelImage implements VisualNovelImage {
   /// number of image flagging votes.
   int? get votecount;
   @override
+
+  /// Pixel dimensions of the image, array with two integer elements indicating the width and height.
+  List<int>? get dims;
+  @override
   @JsonKey(ignore: true)
   _$$_VisualNovelImageCopyWith<_$_VisualNovelImage> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-VisualNovelTag _$VisualNovelTagFromJson(Map<String, dynamic> json) {
-  return _VisualNovelTag.fromJson(json);
-}
-
-/// @nodoc
-mixin _$VisualNovelTag {
-  String get id => throw _privateConstructorUsedError;
-  double get rating => throw _privateConstructorUsedError;
-  int get spoiler => throw _privateConstructorUsedError;
-  bool get lie => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  String get category => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $VisualNovelTagCopyWith<VisualNovelTag> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $VisualNovelTagCopyWith<$Res> {
-  factory $VisualNovelTagCopyWith(
-          VisualNovelTag value, $Res Function(VisualNovelTag) then) =
-      _$VisualNovelTagCopyWithImpl<$Res, VisualNovelTag>;
-  @useResult
-  $Res call(
-      {String id,
-      double rating,
-      int spoiler,
-      bool lie,
-      String name,
-      String category});
-}
-
-/// @nodoc
-class _$VisualNovelTagCopyWithImpl<$Res, $Val extends VisualNovelTag>
-    implements $VisualNovelTagCopyWith<$Res> {
-  _$VisualNovelTagCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? rating = null,
-    Object? spoiler = null,
-    Object? lie = null,
-    Object? name = null,
-    Object? category = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      rating: null == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as double,
-      spoiler: null == spoiler
-          ? _value.spoiler
-          : spoiler // ignore: cast_nullable_to_non_nullable
-              as int,
-      lie: null == lie
-          ? _value.lie
-          : lie // ignore: cast_nullable_to_non_nullable
-              as bool,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$_VisualNovelTagCopyWith<$Res>
-    implements $VisualNovelTagCopyWith<$Res> {
-  factory _$$_VisualNovelTagCopyWith(
-          _$_VisualNovelTag value, $Res Function(_$_VisualNovelTag) then) =
-      __$$_VisualNovelTagCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String id,
-      double rating,
-      int spoiler,
-      bool lie,
-      String name,
-      String category});
-}
-
-/// @nodoc
-class __$$_VisualNovelTagCopyWithImpl<$Res>
-    extends _$VisualNovelTagCopyWithImpl<$Res, _$_VisualNovelTag>
-    implements _$$_VisualNovelTagCopyWith<$Res> {
-  __$$_VisualNovelTagCopyWithImpl(
-      _$_VisualNovelTag _value, $Res Function(_$_VisualNovelTag) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? rating = null,
-    Object? spoiler = null,
-    Object? lie = null,
-    Object? name = null,
-    Object? category = null,
-  }) {
-    return _then(_$_VisualNovelTag(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      rating: null == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as double,
-      spoiler: null == spoiler
-          ? _value.spoiler
-          : spoiler // ignore: cast_nullable_to_non_nullable
-              as int,
-      lie: null == lie
-          ? _value.lie
-          : lie // ignore: cast_nullable_to_non_nullable
-              as bool,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$_VisualNovelTag implements _VisualNovelTag {
-  const _$_VisualNovelTag(
-      {required this.id,
-      required this.rating,
-      required this.spoiler,
-      required this.lie,
-      required this.name,
-      required this.category});
-
-  factory _$_VisualNovelTag.fromJson(Map<String, dynamic> json) =>
-      _$$_VisualNovelTagFromJson(json);
-
-  @override
-  final String id;
-  @override
-  final double rating;
-  @override
-  final int spoiler;
-  @override
-  final bool lie;
-  @override
-  final String name;
-  @override
-  final String category;
-
-  @override
-  String toString() {
-    return 'VisualNovelTag(id: $id, rating: $rating, spoiler: $spoiler, lie: $lie, name: $name, category: $category)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_VisualNovelTag &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.rating, rating) || other.rating == rating) &&
-            (identical(other.spoiler, spoiler) || other.spoiler == spoiler) &&
-            (identical(other.lie, lie) || other.lie == lie) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.category, category) ||
-                other.category == category));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, rating, spoiler, lie, name, category);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_VisualNovelTagCopyWith<_$_VisualNovelTag> get copyWith =>
-      __$$_VisualNovelTagCopyWithImpl<_$_VisualNovelTag>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_VisualNovelTagToJson(
-      this,
-    );
-  }
-}
-
-abstract class _VisualNovelTag implements VisualNovelTag {
-  const factory _VisualNovelTag(
-      {required final String id,
-      required final double rating,
-      required final int spoiler,
-      required final bool lie,
-      required final String name,
-      required final String category}) = _$_VisualNovelTag;
-
-  factory _VisualNovelTag.fromJson(Map<String, dynamic> json) =
-      _$_VisualNovelTag.fromJson;
-
-  @override
-  String get id;
-  @override
-  double get rating;
-  @override
-  int get spoiler;
-  @override
-  bool get lie;
-  @override
-  String get name;
-  @override
-  String get category;
-  @override
-  @JsonKey(ignore: true)
-  _$$_VisualNovelTagCopyWith<_$_VisualNovelTag> get copyWith =>
       throw _privateConstructorUsedError;
 }

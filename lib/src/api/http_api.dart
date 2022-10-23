@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
+import 'package:flt_vndb/src/api/character.dart';
 import 'package:flt_vndb/src/api/filter.dart';
 import 'package:flt_vndb/src/api/release.dart';
+import 'package:flt_vndb/src/api/tag.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flt_vndb/src/api/vn.dart';
 import 'package:logging/logging.dart';
+import 'package:quiver/cache.dart';
+import 'package:tuple/tuple.dart';
 
 part 'http_api.g.dart';
 part 'http_api.freezed.dart';
@@ -89,12 +93,24 @@ class ApiResponse<T> {
     Map<String, dynamic> Function(T value) toJsonT,
   ) =>
       _$ApiResponseToJson(this, toJsonT);
+
+  ApiResponse<R> cast<R>() => ApiResponse<R>(
+        results: results.cast<R>(),
+        more: more,
+        count: count,
+        compactFilters: compactFilters,
+        normalizedFilters: normalizedFilters,
+      );
 }
 
 class VndbHttpApi {
   static final log = Logger("VndbHttpApi");
 
   final Dio _dio;
+
+  final cache = MapCache<Tuple2<String, ApiQuery>, ApiResponse<dynamic>>.lru(
+    maximumSize: 20,
+  );
 
   VndbHttpApi({required String baseUrl})
       : _dio = Dio(
@@ -123,6 +139,12 @@ class VndbHttpApi {
     ApiQuery query,
     T Function(Map<String, dynamic> json) fromJsonT,
   ) async {
+    final cacheKey = Tuple2(path, query);
+    final cachedResponse = await cache.get(cacheKey);
+    if (cachedResponse != null) {
+      return cachedResponse.cast<T>();
+    }
+
     final jsonQuery = query.toJson();
 
     jsonQuery["fields"] = jsonQuery["fields"].join(",");
@@ -132,10 +154,14 @@ class VndbHttpApi {
       data: jsonQuery,
     );
 
-    return ApiResponse.fromJson(
+    final r = ApiResponse.fromJson(
       response.data as Map<String, dynamic>,
       fromJsonT,
     );
+
+    await cache.set(cacheKey, r);
+
+    return r;
   }
 
   Future<ApiResponse<VisualNovel>> queryVisualNovels(
@@ -155,6 +181,26 @@ class VndbHttpApi {
       '/release',
       query,
       (json) => Release.fromJson(json),
+    );
+  }
+
+  Future<ApiResponse<VisualNovelTag>> queryTags(
+    ApiQuery query,
+  ) async {
+    return _query(
+      '/tag',
+      query,
+      (json) => VisualNovelTag.fromJson(json),
+    );
+  }
+
+  Future<ApiResponse<Character>> queryCharacters(
+    ApiQuery query,
+  ) async {
+    return _query(
+      '/character',
+      query,
+      (json) => Character.fromJson(json),
     );
   }
 

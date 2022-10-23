@@ -1,6 +1,5 @@
 import 'package:flt_vndb/src/api/http_api.dart';
 import 'package:flt_vndb/src/api/release.dart';
-import 'package:flt_vndb/src/api/vn.dart';
 import 'package:flt_vndb/src/widgets/item_list.dart';
 import 'package:flt_vndb/src/widgets/release/release_item.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,7 @@ class ReleaseList extends HookWidget {
 
   final String? selectedId;
 
-  final void Function(VisualNovel)? onItemClick;
+  final void Function(Release)? onItemClick;
 
   ReleaseList({
     required ApiQuery query,
@@ -47,6 +46,12 @@ class ReleaseList extends HookWidget {
       },
       itemBuilder: (context, item, index) => ReleaseItem(
         item,
+        onTap: onItemClick != null
+            ? () {
+                onItemClick?.call(item);
+              }
+            : null,
+        selected: selectedId == item.id,
         key: ValueKey(item.id),
       ),
       initialSortSetting: const SortSetting("released", true),

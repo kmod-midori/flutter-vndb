@@ -63,7 +63,7 @@ class MainPage extends HookWidget {
     );
 
     final thumbnail =
-        vn.imageUrl != null ? VisualNovelThumbnail(vn.imageUrl!) : null;
+        vn.imageUrl != null ? VisualNovelThumbnail(vn.image!) : null;
 
     final lengthToText = {
       1: l10n.lengthVeryShort,

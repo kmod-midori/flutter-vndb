@@ -1,3 +1,4 @@
+import 'package:flt_vndb/src/api/tag.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -29,7 +30,7 @@ class VisualNovel with _$VisualNovel {
     String? olang,
 
     /// development status. 0 meaning ‘Finished’, 1 is ‘In development’ and 2 for ‘Cancelled’.
-    int? devstatus,
+    DevelopmentStatus? devstatus,
 
     /// Date of the first release.
     String? released,
@@ -93,10 +94,6 @@ class VisualNovel with _$VisualNovel {
       }
     }
 
-    // if (!settings.localizedTitle) {
-    //   return this.title!;
-    // }
-
     final availableLocales = titles?.map((t) {
       final p = t.lang.indexOf('-');
       if (p == -1) {
@@ -129,9 +126,6 @@ class VisualNovel with _$VisualNovel {
   // // // === relations ===
   // // final List<VisualNovelRelation>? relations;
 
-  // // // === staff ===
-  // // final List<VisualNovelStaff>? staff;
-
   factory VisualNovel.fromJson(Map<String, dynamic> json) =>
       _$VisualNovelFromJson(json);
 }
@@ -139,6 +133,8 @@ class VisualNovel with _$VisualNovel {
 /// You must use `titles{lang,title,official,main}` if you are using this class.
 @freezed
 class VisualNovelTitle with _$VisualNovelTitle {
+  static const defaultFields = "titles{lang,title,official,main}";
+
   const factory VisualNovelTitle({
     /// language of this title. Each language appears at most once in the titles list.
     required String lang,
@@ -194,46 +190,10 @@ class VisualNovelRelation {
   }
 }
 
-@JsonSerializable()
-class VisualNovelStaff {
-  /// Staff ID
-  final int sid;
-
-  /// Alias ID
-  final int aid;
-
-  final String name;
-
-  /// original name
-  final String? original;
-
-  /// original/official title
-  final String role;
-
-  final String? note;
-
-  VisualNovelStaff({
-    required this.sid,
-    required this.aid,
-    required this.name,
-    this.original,
-    required this.role,
-    this.note,
-  });
-
-  factory VisualNovelStaff.fromJson(Map<String, dynamic> json) =>
-      _$VisualNovelStaffFromJson(json);
-
-  Map<String, dynamic> toJson() => _$VisualNovelStaffToJson(this);
-
-  @override
-  String toString() {
-    return 'VisualNovelStaff(sid: $sid, aid: $aid, name: $name, original: $original, role: $role, note: $note)';
-  }
-}
-
 @freezed
 class VisualNovelImage with _$VisualNovelImage {
+  static const defaultFields = "image{url,sexual,violence}";
+
   const factory VisualNovelImage({
     String? id,
     String? url,
@@ -246,24 +206,22 @@ class VisualNovelImage with _$VisualNovelImage {
 
     /// number of image flagging votes.
     int? votecount,
+
+    /// Pixel dimensions of the image, array with two integer elements indicating the width and height.
+    List<int>? dims,
   }) = _VisualNovelImage;
+
+  const VisualNovelImage._();
 
   factory VisualNovelImage.fromJson(Map<String, dynamic> json) =>
       _$VisualNovelImageFromJson(json);
 }
 
-/// `tags{id,rating,spoiler,lie,name,category}`
-@freezed
-class VisualNovelTag with _$VisualNovelTag {
-  const factory VisualNovelTag({
-    required String id,
-    required double rating,
-    required int spoiler,
-    required bool lie,
-    required String name,
-    required String category,
-  }) = _VisualNovelTag;
-
-  factory VisualNovelTag.fromJson(Map<String, dynamic> json) =>
-      _$VisualNovelTagFromJson(json);
+enum DevelopmentStatus {
+  @JsonValue(0)
+  finished,
+  @JsonValue(1)
+  inDevelopment,
+  @JsonValue(2)
+  cancelled,
 }

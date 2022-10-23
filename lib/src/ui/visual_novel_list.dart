@@ -23,10 +23,10 @@ class VisualNovelList extends HookWidget {
           "title",
           "alttitle",
           "released",
-          "titles{lang,title,latin,official,main}",
+          VisualNovelTitle.defaultFields,
           "languages",
           "platforms",
-          "image.url",
+          VisualNovelImage.defaultFields,
           "rating",
           "popularity",
           "votecount"

@@ -25,26 +25,6 @@ Map<String, dynamic> _$VisualNovelRelationToJson(
       'official': instance.official,
     };
 
-VisualNovelStaff _$VisualNovelStaffFromJson(Map<String, dynamic> json) =>
-    VisualNovelStaff(
-      sid: json['sid'] as int,
-      aid: json['aid'] as int,
-      name: json['name'] as String,
-      original: json['original'] as String?,
-      role: json['role'] as String,
-      note: json['note'] as String?,
-    );
-
-Map<String, dynamic> _$VisualNovelStaffToJson(VisualNovelStaff instance) =>
-    <String, dynamic>{
-      'sid': instance.sid,
-      'aid': instance.aid,
-      'name': instance.name,
-      'original': instance.original,
-      'role': instance.role,
-      'note': instance.note,
-    };
-
 _$_VisualNovel _$$_VisualNovelFromJson(Map<String, dynamic> json) =>
     _$_VisualNovel(
       id: json['id'] as String,
@@ -56,7 +36,8 @@ _$_VisualNovel _$$_VisualNovelFromJson(Map<String, dynamic> json) =>
       aliases:
           (json['aliases'] as List<dynamic>?)?.map((e) => e as String).toList(),
       olang: json['olang'] as String?,
-      devstatus: json['devstatus'] as int?,
+      devstatus:
+          $enumDecodeNullable(_$DevelopmentStatusEnumMap, json['devstatus']),
       released: json['released'] as String?,
       languages: (json['languages'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -87,7 +68,7 @@ Map<String, dynamic> _$$_VisualNovelToJson(_$_VisualNovel instance) =>
       'titles': instance.titles,
       'aliases': instance.aliases,
       'olang': instance.olang,
-      'devstatus': instance.devstatus,
+      'devstatus': _$DevelopmentStatusEnumMap[instance.devstatus],
       'released': instance.released,
       'languages': instance.languages,
       'platforms': instance.platforms,
@@ -101,6 +82,12 @@ Map<String, dynamic> _$$_VisualNovelToJson(_$_VisualNovel instance) =>
       'votecount': instance.votecount,
       'tags': instance.tags,
     };
+
+const _$DevelopmentStatusEnumMap = {
+  DevelopmentStatus.finished: 0,
+  DevelopmentStatus.inDevelopment: 1,
+  DevelopmentStatus.cancelled: 2,
+};
 
 _$_VisualNovelTitle _$$_VisualNovelTitleFromJson(Map<String, dynamic> json) =>
     _$_VisualNovelTitle(
@@ -127,6 +114,7 @@ _$_VisualNovelImage _$$_VisualNovelImageFromJson(Map<String, dynamic> json) =>
       sexual: (json['sexual'] as num?)?.toDouble(),
       violence: (json['violence'] as num?)?.toDouble(),
       votecount: json['votecount'] as int?,
+      dims: (json['dims'] as List<dynamic>?)?.map((e) => e as int).toList(),
     );
 
 Map<String, dynamic> _$$_VisualNovelImageToJson(_$_VisualNovelImage instance) =>
@@ -136,24 +124,5 @@ Map<String, dynamic> _$$_VisualNovelImageToJson(_$_VisualNovelImage instance) =>
       'sexual': instance.sexual,
       'violence': instance.violence,
       'votecount': instance.votecount,
-    };
-
-_$_VisualNovelTag _$$_VisualNovelTagFromJson(Map<String, dynamic> json) =>
-    _$_VisualNovelTag(
-      id: json['id'] as String,
-      rating: (json['rating'] as num).toDouble(),
-      spoiler: json['spoiler'] as int,
-      lie: json['lie'] as bool,
-      name: json['name'] as String,
-      category: json['category'] as String,
-    );
-
-Map<String, dynamic> _$$_VisualNovelTagToJson(_$_VisualNovelTag instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'rating': instance.rating,
-      'spoiler': instance.spoiler,
-      'lie': instance.lie,
-      'name': instance.name,
-      'category': instance.category,
+      'dims': instance.dims,
     };

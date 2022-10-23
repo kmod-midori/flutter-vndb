@@ -25,8 +25,6 @@ class VisualNovelListView extends HookWidget {
     );
   }
 
-  static const routeName = '/vn_list';
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -47,13 +45,7 @@ class VisualNovelListView extends HookWidget {
       query: query,
       onItemClick: (vn) {
         if (isMobileLayout) {
-          Navigator.restorablePushNamed(
-            context,
-            VisualNovelDetailsView.routeName,
-            arguments: {
-              "id": vn.id,
-            },
-          );
+          Navigator.restorablePushNamed(context, "/vn/${vn.id}");
         } else {
           selectedVn.value = vn;
         }

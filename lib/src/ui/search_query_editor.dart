@@ -20,13 +20,8 @@ class SearchQueryEditor extends HookWidget {
       reverse: true,
     );
 
-    Navigator.restorablePushNamed(
-      context,
-      VisualNovelListView.routeName,
-      arguments: {
-        "query": query.toJson(),
-      },
-    );
+    Navigator.restorablePushNamed(context, '/search/vn',
+        arguments: {"query": query.toJson()});
   }
 
   @override
@@ -53,8 +48,6 @@ class SearchQueryEditor extends HookWidget {
 }
 
 class SearchQueryPage extends HookWidget {
-  static const routeName = '/search';
-
   const SearchQueryPage({super.key});
 
   @override

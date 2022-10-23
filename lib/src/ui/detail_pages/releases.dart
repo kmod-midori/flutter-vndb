@@ -124,6 +124,9 @@ class ReleasesPage extends HookWidget {
               ),
               fields: [],
             ),
+            onItemClick: (item) {
+              Navigator.of(context).restorablePushNamed("/release/${item.id}");
+            },
             key: ValueKey(filters),
           ),
         )

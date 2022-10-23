@@ -1,5 +1,6 @@
 import 'package:flt_vndb/src/api/http_api.dart';
 import 'package:flt_vndb/src/api/vn.dart';
+import 'package:flt_vndb/src/ui/detail_pages/character.dart';
 import 'package:flt_vndb/src/ui/detail_pages/info.dart';
 import 'package:flt_vndb/src/ui/detail_pages/releases.dart';
 import 'package:flt_vndb/src/ui/detail_pages/tags.dart';
@@ -25,13 +26,9 @@ class VisualNovelDetailsView extends HookWidget {
     );
   }
 
-  static const routeName = '/vn';
-
   @override
   Widget build(BuildContext context) {
-    // final l10n = AppLocalizations.of(context)!;
-
-    final tabController = useTabController(initialLength: 3);
+    final tabController = useTabController(initialLength: 4);
 
     final vnSnapshot = useFuture(
       useMemoized(
@@ -39,8 +36,8 @@ class VisualNovelDetailsView extends HookWidget {
           "title",
           "alttitle",
           "released",
-          "titles{lang,title,latin,official,main}",
-          "image.url",
+          VisualNovelTitle.defaultFields,
+          VisualNovelImage.defaultFields,
           "aliases",
           "description",
           "length",
@@ -63,6 +60,7 @@ class VisualNovelDetailsView extends HookWidget {
         const Tab(text: "Info"), // Info
         const Tab(text: "Tags"), // Tags
         const Tab(text: "Releases"), // Releases
+        const Tab(text: "Characters"),
         // const Tab(icon: Icon(Icons.person)) // Staff
       ],
       isScrollable: true,
@@ -71,9 +69,10 @@ class VisualNovelDetailsView extends HookWidget {
     final tabBarView = TabBarView(
       controller: tabController,
       children: <Widget>[
-        MainPage(vn, key: ValueKey("${id}_main")),
-        TagsPage(id, key: ValueKey("${id}_tags")),
-        ReleasesPage(id, key: ValueKey("${id}_releases")),
+        MainPage(vn),
+        TagsPage(id),
+        ReleasesPage(id),
+        CharactersPage(id),
         // Center(child: Text(vnDetail?.staff?.toString() ?? "Loading...")),
       ],
     );

@@ -1,3 +1,6 @@
+import 'package:flt_vndb/src/api/filter.dart';
+import 'package:flt_vndb/src/api/http_api.dart';
+import 'package:flt_vndb/src/ui/character_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -7,7 +10,14 @@ class CharactersPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    useAutomaticKeepAlive(wantKeepAlive: true);
+
+    var filters = NestedFilter(
+      key: "vn",
+      op: FilterOperator.eq,
+      value: StringFilter(key: "id", op: FilterOperator.eq, value: vnId),
+    );
+
+    return CharacterList(query: ApiQuery(filters: filters, fields: []));
   }
 }
