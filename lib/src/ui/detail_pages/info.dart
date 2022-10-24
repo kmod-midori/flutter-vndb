@@ -40,7 +40,8 @@ class MainPage extends HookWidget {
               // maxLines: 3,
             )),
             const SizedBox(width: 16.0),
-            if (vn.titles != null)
+            if (vn.titles != null && vn.titles!.length > 1)
+              // We have multiple titles, show a button to a dialog.
               IconButton(
                 icon: const Icon(Icons.translate),
                 tooltip: l10n.otherLanguages,
