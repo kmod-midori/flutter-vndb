@@ -26,6 +26,9 @@ class SettingsController with ChangeNotifier {
   late TitleLanguage _titleLanguage;
   TitleLanguage get titleLanguage => _titleLanguage;
 
+  late bool _nsfw;
+  bool get nsfw => _nsfw;
+
   static SettingsController of(BuildContext context) {
     return Provider.of<SettingsController>(context);
   }
@@ -36,6 +39,7 @@ class SettingsController with ChangeNotifier {
     _apiConfig = await _settingsService.apiConfig();
     _locale = await _settingsService.locale();
     _titleLanguage = await _settingsService.titleLanguage();
+    _nsfw = await _settingsService.nsfw();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -75,5 +79,14 @@ class SettingsController with ChangeNotifier {
     _titleLanguage = newTitleLanguage;
     notifyListeners();
     await _settingsService.updateTitleLanguage(newTitleLanguage);
+  }
+
+  Future<void> updateNsfw(bool newNsfw) async {
+    if (newNsfw == _nsfw) {
+      return;
+    }
+    _nsfw = newNsfw;
+    notifyListeners();
+    await _settingsService.updateNsfw(newNsfw);
   }
 }

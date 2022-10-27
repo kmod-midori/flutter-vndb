@@ -3,6 +3,7 @@ import 'package:flt_vndb/src/ui/list_item/visual_novel_item.dart';
 import 'package:flt_vndb/src/utils/bb_code_text.dart';
 import 'package:flt_vndb/src/utils/hooks.dart';
 import 'package:flt_vndb/src/widgets/language_row.dart';
+import 'package:flt_vndb/src/widgets/thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

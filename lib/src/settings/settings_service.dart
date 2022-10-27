@@ -77,6 +77,16 @@ class SettingsService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('titleLanguage', titleLanguage.index);
   }
+
+  Future<bool> nsfw() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('nsfw') ?? false;
+  }
+
+  Future<void> updateNsfw(bool nsfw) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('nsfw', nsfw);
+  }
 }
 
 class ApiConfig {

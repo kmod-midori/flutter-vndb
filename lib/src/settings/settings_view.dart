@@ -88,6 +88,13 @@ class SettingsView extends StatelessWidget {
         //     }
         //   },
         // ),
+        SwitchListTile(
+          title: const Text("NSFW"),
+          value: settingsController.nsfw,
+          onChanged: (value) {
+            settingsController.updateNsfw(value);
+          },
+        ),
         // Language Override
         ListTile(
           title: Text(l10n.language),

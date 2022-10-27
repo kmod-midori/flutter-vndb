@@ -1,5 +1,5 @@
 import 'package:flt_vndb/src/api/character.dart';
-import 'package:flt_vndb/src/ui/list_item/visual_novel_item.dart';
+import 'package:flt_vndb/src/widgets/thumbnail.dart';
 import 'package:flutter/material.dart';
 
 class CharacterItem extends StatelessWidget {

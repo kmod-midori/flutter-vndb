@@ -213,6 +213,11 @@ class VisualNovelImage with _$VisualNovelImage {
 
   const VisualNovelImage._();
 
+  bool get isSuggestive => sexual != null && sexual! > 0.4;
+  bool get isExplicit => sexual != null && sexual! > 1.3;
+  bool get isViolent => violence != null && violence! > 0.4;
+  bool get isBrutal => violence != null && violence! > 1.3;
+
   factory VisualNovelImage.fromJson(Map<String, dynamic> json) =>
       _$VisualNovelImageFromJson(json);
 }
