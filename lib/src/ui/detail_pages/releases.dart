@@ -3,7 +3,7 @@ import 'package:flt_vndb/src/api/http_api.dart';
 import 'package:flt_vndb/src/data/languages.dart';
 import 'package:flt_vndb/src/data/platforms.dart';
 import 'package:flt_vndb/src/widgets/picker.dart';
-import 'package:flt_vndb/src/widgets/release/release_list.dart';
+import 'package:flt_vndb/src/ui/list/release_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

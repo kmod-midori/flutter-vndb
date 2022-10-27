@@ -1,5 +1,5 @@
 import 'package:flt_vndb/src/api/vn.dart';
-import 'package:flt_vndb/src/ui/visual_novel_item.dart';
+import 'package:flt_vndb/src/ui/list_item/visual_novel_item.dart';
 import 'package:flt_vndb/src/utils/bb_code_text.dart';
 import 'package:flt_vndb/src/utils/hooks.dart';
 import 'package:flt_vndb/src/widgets/language_row.dart';
@@ -34,11 +34,12 @@ class MainPage extends HookWidget {
         Row(
           children: <Widget>[
             Expanded(
-                child: SelectableText(
-              vn.getLocalizedTitle(context),
-              style: Theme.of(context).textTheme.titleLarge,
-              // maxLines: 3,
-            )),
+              child: SelectableText(
+                vn.getLocalizedTitle(context),
+                style: Theme.of(context).textTheme.titleLarge,
+                // maxLines: 3,
+              ),
+            ),
             const SizedBox(width: 16.0),
             if (vn.titles != null && vn.titles!.length > 1)
               // We have multiple titles, show a button to a dialog.
@@ -51,7 +52,7 @@ class MainPage extends HookWidget {
               )
           ],
         ),
-        if (vn.alttitle != null)
+        if (vn.alttitle != null && vn.alttitle!.isNotEmpty)
           SelectableText(
             vn.alttitle!,
             style: Theme.of(context).textTheme.caption,
@@ -91,9 +92,9 @@ class MainPage extends HookWidget {
       children: <ExpansionPanelRadio>[
         ExpansionPanelRadio(
           value: "basic",
-          headerBuilder: ((context, isExpanded) => ListTile(
-                title: Text(l10n.basicInfo),
-              )),
+          headerBuilder: (context, isExpanded) => ListTile(
+            title: Text(l10n.basicInfo),
+          ),
           body: Column(children: [
             if (vn.released != null)
               ListTile(

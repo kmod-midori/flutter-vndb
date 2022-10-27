@@ -1,7 +1,6 @@
 import 'package:flt_vndb/src/api/character.dart';
 import 'package:flt_vndb/src/api/http_api.dart';
-import 'package:flt_vndb/src/api/vn.dart';
-import 'package:flt_vndb/src/ui/visual_novel_item.dart';
+import 'package:flt_vndb/src/ui/list_item/character_item.dart';
 import 'package:flt_vndb/src/widgets/item_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -9,7 +8,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class CharacterList extends HookWidget {
   final ApiQuery query;
 
-  CharacterList({required ApiQuery query, super.key})
+  final void Function(Character)? onItemClick;
+
+  CharacterList({required ApiQuery query, this.onItemClick, super.key})
       : query = query.copyWith(fields: Character.defaultListFields);
 
   @override
@@ -26,27 +27,14 @@ class CharacterList extends HookWidget {
         );
         return ItemListPage(items.results, items.more);
       },
-      itemBuilder: (context, item, index) => InkWell(
-        onTap: () {},
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (item.image != null)
-                SizedBox(
-                  width: 100,
-                  child: VisualNovelThumbnail(item.image!),
-                ),
-              Expanded(
-                child: ListTile(
-                  title: Text(item.name),
-                  subtitle: item.original != null ? Text(item.original!) : null,
-                ),
-              )
-            ],
-          ),
-        ),
+      itemBuilder: (context, item, index) => CharacterItem(
+        item,
+        onTap: onItemClick != null
+            ? () {
+                onItemClick?.call(item);
+              }
+            : null,
+        key: ValueKey(item.id),
       ),
       initialSortSetting: const SortSetting("role", false),
       sortOptions: [

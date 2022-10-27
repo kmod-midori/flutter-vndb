@@ -1,7 +1,7 @@
 import 'package:flt_vndb/src/api/http_api.dart';
 import 'package:flt_vndb/src/api/release.dart';
 import 'package:flt_vndb/src/widgets/item_list.dart';
-import 'package:flt_vndb/src/widgets/release/release_item.dart';
+import 'package:flt_vndb/src/ui/list_item/release_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

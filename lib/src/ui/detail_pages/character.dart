@@ -1,6 +1,6 @@
 import 'package:flt_vndb/src/api/filter.dart';
 import 'package:flt_vndb/src/api/http_api.dart';
-import 'package:flt_vndb/src/ui/character_list.dart';
+import 'package:flt_vndb/src/ui/list/character_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

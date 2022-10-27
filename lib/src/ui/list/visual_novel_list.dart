@@ -4,7 +4,7 @@ import 'package:flt_vndb/src/widgets/item_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import 'visual_novel_item.dart';
+import '../list_item/visual_novel_item.dart';
 
 /// Displays a list of visual novels.
 class VisualNovelList extends HookWidget {
